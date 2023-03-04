@@ -31,6 +31,13 @@ void disp_board(char board[TAILLE][TAILLE]) {
     printf("\n");
 }
 
+char joueur_Aléatoire(){
+    srand(time(NULL));
+    int Paléatoire = rand() % 2;
+    char Pstart = ' ';
+    return Pstart = (Paléatoire == 0) ? P1 : P2;
+}
+
 void pos_Selection(char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
     char colChar;

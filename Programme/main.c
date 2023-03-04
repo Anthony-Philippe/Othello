@@ -5,12 +5,11 @@ int main(void){
     init_board(board);
     
     bool end_Game = false;
-    char Pstart = P1;
+    char Pstart = joueur_Aléatoire();
     
-    CleanWindows
     while(1){
+        CleanWindows
 		int choix = menu();
-		CleanWindows
 		switch(choix){
 			case 1:
                 while (!end_Game) {

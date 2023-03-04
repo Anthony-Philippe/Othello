@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 #define couleur(param) printf("\033[%sm",param)
 #define CleanWindows system("clear");
@@ -15,6 +16,7 @@
 #define VIDE ' '
 
 int menu();
+char joueur_Aléatoire();
 
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
