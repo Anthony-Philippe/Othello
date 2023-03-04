@@ -4,13 +4,15 @@
 | Lancement partie                              | ✓ |
 | Joueur aléatoire                              | ✓ |
 | Sélection case                                | ✓ |
-| Vérification placement                        |  |
+| Vérification placement                        |   |
 | Placement pion                                | ✓ |
 | Vérification gagnant / égalité                | ✓ |
 | Affichage résultat                            | ✓ |
 | Passer tour du joueur (ordinateur)            |   |
 | Annuler coup                                  |   |
-| Arréter, enregistrer, reprendre partie        |   |
+| Arréter partie                                |   |
+| Enregistrer partie                            |   |
+| Reprendre partie                              |   |
 | ...                                           |   |
 
 
