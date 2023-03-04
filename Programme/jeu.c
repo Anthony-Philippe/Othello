@@ -73,27 +73,27 @@ bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
 
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col) {
     board[ligne][col] = Player;
-    for (int di = -1; di <= 1; di++) {
-        for (int dj = -1; dj <= 1; dj++) {
-            if (di == 0 && dj == 0) continue;
-            int i = ligne + di;
-            int j = col + dj;
+    for (int DirL = -1; DirL <= 1; DirL++) {
+        for (int DirC = -1; DirC <= 1; DirC++) {
+            if (DirL == 0 && DirC == 0) continue;
+            int i = ligne + DirL;
+            int j = col + DirC;
             bool capture_check = false;
             while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
                 if (board[i][j] == Player) {
                     capture_check = true;
                     break;
                 }
-                i += di;
-                j += dj;
+                i += DirL;
+                j += DirC;
             }
             if (capture_check) {
-                i = ligne + di;
-                j = col + dj;
+                i = ligne + DirL;
+                j = col + DirC;
                 while (board[i][j] != Player) {
                     board[i][j] = Player;
-                    i += di;
-                    j += dj;
+                    i += DirL;
+                    j += DirC;
                 }
             }
         }
