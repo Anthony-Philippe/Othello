@@ -14,6 +14,8 @@
 #define P2 'O'
 #define VIDE ' '
 
+int menu();
+
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
 void pos_Selection(char board[TAILLE][TAILLE], char Player);
