@@ -7,7 +7,7 @@ Projet Informatique – ISEN3
 
 Règles du jeu: https://www.ffothello.org/othello/regles-du-jeu/
 
-| Equipes   |            |
+| Equipe    |            |
 | --------- | ---------- |
 | Anthony   | PHILIPPE   |
 | Léo       | VILLENEUVE |
