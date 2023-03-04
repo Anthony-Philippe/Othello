@@ -4,13 +4,21 @@
 | Lancement partie                              | ✓ |
 | Joueur aléatoire                              | ✓ |
 | Sélection case                                | ✓ |
-| Vérification placement                        | ✓ |
+| Vérification placement                        |  |
 | Placement pion                                | ✓ |
 | Vérification gagnant / égalité                | ✓ |
 | Affichage résultat                            | ✓ |
 | Passer tour du joueur (ordinateur)            |   |
 | Annuler coup                                  |   |
 | Arréter, enregistrer, reprendre partie        |   |
+| ...                                           |   |
+
+
+| Autres                                        |   |
+| --------------------------------------------- | - |
+| Menu Principal                                | ✓ |
+| Quitter jeu                                   | ✓ |
+| Choix JvJ ou JvIA                             |   |
 | ...                                           |   |
 
 
@@ -22,19 +30,12 @@
 | Niveau 3                                      |   |
 | Algorithme principal                          |   |
 | Fonction d'évaluation enregistré (fichier)    |   |
-| ...                                           |   |
-
-
-| Autres                                        |   |
-| --------------------------------------------- | - |
-| Choix JvJ ou JvIA                             |   |
-| ...                                           |   |
 
 
 | Fonctionnalité suplémentaire                  |   |
 | --------------------------------------------- | - |
-| Interface Grapgique                           |   |
+| Interface Graphique                           |   |
 | Flashback dernière partie joué                |   |
 | Statistiques                                  |   |
-| Choix d'un nom                                |   |
+| Choix d'un pseudo                             |   |
 | ...                                           |   |

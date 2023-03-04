@@ -6,7 +6,7 @@
 
 | Exigences technique                           |   |
 | --------------------------------------------- | - |
-| Fin de la parti                               |   |
+| Fin de la parti                               | ✓ |
 | Gestion joueur                                | ✓ |
 | Joueur doit passer son tour                   |   |
 | Recommencer une partie                        |   |
