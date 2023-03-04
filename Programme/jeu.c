@@ -11,8 +11,9 @@ void init_board(char board[TAILLE][TAILLE]) {
 }
 
 void disp_board(char board[TAILLE][TAILLE]) {
-    printf("  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col+1);
+    char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+    printf("\n  ");
+    for (int Col = 0; Col < TAILLE; Col++) printf("%c ", col_Board[Col]);
     printf("\n");
     for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
         printf("%d ", Ligne+1);
@@ -26,18 +27,22 @@ void disp_board(char board[TAILLE][TAILLE]) {
         printf("\n");
     }
     printf("  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col+1);
+    for (int Col = 0; Col < TAILLE; Col++) printf("%c ", col_Board[Col]);
     printf("\n");
 }
 
 void pos_Selection(char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
+    char colChar;
+    char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     bool coup_valide = false;
     while (!coup_valide){
-        printf("P%c, Entrez position: Ligne Colonne → ", Player);
-        scanf("%d %d", &ligne, &col);
+        printf("P%c, Entrez position: Colonne Ligne → ", Player);
+        scanf("%c %d", &colChar, &ligne);
+        for (int n = 0; n < TAILLE; n++) {
+            if (colChar == col_Board[n]) col = n;
+        }
         ligne--;
-        col--;
         coup_valide = check_Coup(board, Player, ligne, col);
         if (!coup_valide) printf("Coup invalide\n");
     }
