@@ -21,4 +21,3 @@
 | Rapport de test                               |   |
 | Présentation oral                             |   |
 | Recette du projet (résultats...)              |   |
-| Possibilité d’annuler coups                   |   |
