@@ -20,10 +20,10 @@
 #define NEG_INFINITY -1000000 // Valeur moins l'infini
 
 int menu();
-char joueur_Aléatoire();
 
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
+char joueur_Aléatoire();
 void pos_Selection(char board[TAILLE][TAILLE], char Player);
 bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
