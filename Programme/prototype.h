@@ -10,7 +10,6 @@
 
 
 #define TAILLE 8
-
 #define P1 'X'
 #define P2 'O'
 #define VIDE ' '
