@@ -1,6 +1,8 @@
 #include "prototype.h"
 
 // Fonction test IA
+#define BLACK 1 // ?
+#define WHITE 1 // ?
 
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer) {
     if (depth == MAX_DEPTH) {
@@ -63,3 +65,5 @@ void computerPlay(char board[8][8]) {
                 }
             }
         }
+    }
+}

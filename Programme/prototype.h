@@ -19,8 +19,10 @@
 #define INFINITY 1000000 // Valeur infinie
 #define NEG_INFINITY -1000000 // Valeur moins l'infini
 
+// * Interface
 int menu();
 
+// * Jeu
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
@@ -29,5 +31,7 @@ bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE]);
+
+// * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);
 void computerPlay(char board[8][8]);
