@@ -1,4 +1,4 @@
-#include "prototype.h"
+/*#include "prototype.h"
 
 // Fonction test IA
 #define BLACK 1 // ?
@@ -66,4 +66,4 @@ void computerPlay(char board[8][8]) {
             }
         }
     }
-}
+}*/
