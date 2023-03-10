@@ -17,7 +17,7 @@
 
 | A rendre                                      |   |
 | --------------------------------------------- | - |
-| Cahier des charges (règles, stratégie, architecture, planification...)                               |   |
+| Cahier des charges (règles, stratégie, architecture, planification...)                               | ✓ |
 | Rapport de test                               |   |
 | Présentation oral                             |   |
 | Recette du projet (résultats...)              |   |
