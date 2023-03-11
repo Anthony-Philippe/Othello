@@ -4,14 +4,13 @@ int main(void){
     char board[TAILLE][TAILLE];
     init_board(board);
     
-    bool end_Game = false;
-    char Pstart = joueur_Aléatoire();
-    
     while(1){
         CleanWindows
 		int choix = menu();
 		switch(choix){
 			case 1:
+                bool end_Game = false;
+                char Pstart = joueur_Aléatoire();
                 while (!end_Game) {
                     CleanWindows
                     disp_board(board);
@@ -19,7 +18,9 @@ int main(void){
                     if(check_Gagnant(board)) end_Game = true;
                     Pstart = (Pstart == P1) ? P2 : P1;
                 }
+                CleanWindows
                 disp_resultat(board);
+                int waitTemp = scanf("%d", &waitTemp);
 				break;
 			default:
 				couleur("31");

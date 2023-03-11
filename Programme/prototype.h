@@ -27,6 +27,7 @@ void disp_board(char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
 void pos_Selection(char board[TAILLE][TAILLE], char Player);
 bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
+bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC);
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE]);

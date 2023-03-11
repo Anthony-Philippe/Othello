@@ -58,27 +58,32 @@ void pos_Selection(char board[TAILLE][TAILLE], char Player) {
 
 bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
     if (board[ligne][col] != VIDE) return false;
-    bool capture = false;
+    bool capture_Valide = false;
     for (int DirL = -1; DirL <= 1; DirL++) {
         for (int DirC = -1; DirC <= 1; DirC++) {
             if (DirL == 0 && DirC == 0) continue;
-            int i = ligne + DirL;
-            int j = col + DirC;
-            bool capture_Valide = false;
-            while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
-                if (board[i][j] == Player) {
-                    capture_Valide = true;
-                    break;
-                }
-                i += DirL;
-                j += DirC;
-            }
-            if (capture_Valide) {
-                capture = true;
+            bool capture = check_Direction(board, Player, ligne, col, DirL, DirC);
+            if (capture) {
+                capture_Valide = true;
                 break;
             }
         }
-        if (capture) break;
+        if (capture_Valide) break;
+    }
+    return capture_Valide;
+}
+
+bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC){
+    int i = ligne + DirL;
+    int j = col + DirC;
+    bool capture = false;
+    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
+        if (board[i][j] == Player) {
+            capture = true;
+            break;
+        }
+        i += DirL;
+        j += DirC;
     }
     return capture;
 }
@@ -88,20 +93,10 @@ void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col)
     for (int DirL = -1; DirL <= 1; DirL++) {
         for (int DirC = -1; DirC <= 1; DirC++) {
             if (DirL == 0 && DirC == 0) continue;
-            int i = ligne + DirL;
-            int j = col + DirC;
-            bool capture_check = false;
-            while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
-                if (board[i][j] == Player) {
-                    capture_check = true;
-                    break;
-                }
-                i += DirL;
-                j += DirC;
-            }
-            if (capture_check) {
-                i = ligne + DirL;
-                j = col + DirC;
+            bool capture = check_Direction(board, Player, ligne, col, DirL, DirC);
+            if (capture) {
+                int i = ligne + DirL;
+                int j = col + DirC;
                 while (board[i][j] != Player) {
                     board[i][j] = Player;
                     i += DirL;
@@ -114,20 +109,20 @@ void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col)
 
 bool check_Gagnant(char board[TAILLE][TAILLE]) {
     bool full_Board = true;
-    bool Coup_Validé = false;
+    bool coup_Possible = false;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
             if (board[i][j] == VIDE) {
                 full_Board = false;
                 if (check_Coup(board, P1, i, j) || check_Coup(board, P2, i, j)) {
-                    Coup_Validé = true;
+                    coup_Possible = true;
                     break;
                 }
             }
         }
-        if (Coup_Validé) break;
+        if (coup_Possible) break;
     }
-    return full_Board || !Coup_Validé;
+    return full_Board || !coup_Possible;
 }
 
 void disp_resultat(char board[TAILLE][TAILLE]) {
