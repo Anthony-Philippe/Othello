@@ -26,6 +26,7 @@ int menu_Start1();
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
+void game_JvJ(char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
 void pos_Selection(char board[TAILLE][TAILLE], char Player);
 bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
