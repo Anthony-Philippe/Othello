@@ -4,7 +4,7 @@
 | Lancement partie                              | ✓ |
 | Joueur aléatoire                              | ✓ |
 | Sélection case                                | ✓ |
-| Vérification placement                        |   |
+| Vérification placement                        | ✓ |
 | Placement pion                                | ✓ |
 | Vérification gagnant / égalité                | ✓ |
 | Affichage résultat                            | ✓ |
