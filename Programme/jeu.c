@@ -97,7 +97,7 @@ void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col)
             if (capture) {
                 int i = ligne + DirL;
                 int j = col + DirC;
-                while (board[i][j] != Player) {
+                while ((i < TAILLE || j < TAILLE) && board[i][j] != VIDE) {
                     if(board[i][j] != Player) board[i][j] = Player;
                     i += DirL;
                     j += DirC;
