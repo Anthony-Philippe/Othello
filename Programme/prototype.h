@@ -20,6 +20,7 @@
 
 // * Interface
 int menu();
+void menu_Crédits();
 
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);

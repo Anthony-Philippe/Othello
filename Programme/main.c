@@ -9,6 +9,7 @@ int main(void){
 		int choix = menu();
 		switch(choix){
 			case 1:
+                //int choix_StartGame = menu_Start1();
                 bool end_Game = false;
                 char Pstart = joueur_Aléatoire();
                 while (!end_Game) {
@@ -21,6 +22,9 @@ int main(void){
                 CleanWindows
                 disp_resultat(board);
                 int waitTemp = scanf("%d", &waitTemp);
+				break;
+            case 2:
+                menu_Crédits();
 				break;
 			default:
 				couleur("31");
