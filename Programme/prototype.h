@@ -21,6 +21,7 @@
 // * Interface
 int menu();
 void menu_Crédits();
+int menu_Start1();
 
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);

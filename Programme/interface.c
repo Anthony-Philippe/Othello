@@ -16,11 +16,25 @@ int menu(){
 	return choix;
 }
 
-int menu_Crédits(){
+void menu_Crédits(){
 	printf("\n════════════════════════════════════════════════════════════════════════════\n");
     printf("                            |      Crédits      |\n");
 	printf("════════════════════════════════════════════════════════════════════════════\n\n");
 	printf("\tbablabla\n");
+	printf("\tAutres ▸ Retour\n");
+    printf("\n");
+	Cursor
+
+	int choix = 0;
+	scanf("%d", &choix);
+}
+
+int menu_Start1(){
+	printf("\n════════════════════════════════════════════════════════════════════════════\n");
+    printf("                           |      Start Game      |\n");
+	printf("════════════════════════════════════════════════════════════════════════════\n\n");
+	printf("\t1▸ Nouvelle partie\n");
+	printf("\t2▸ Charger partie\n");
 	printf("\tAutres ▸ Retour\n");
     printf("\n");
 	Cursor
