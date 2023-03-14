@@ -155,3 +155,23 @@ void disp_resultat(char board[TAILLE][TAILLE]) {
     else if (score_P2 > score_P1) printf("Le P2 gagne !\n");
     else printf("Egalité\n");
 }
+
+void ajout_Coup_liste(char Player){
+    liste_Coup* new_Coup = (liste_Coup*)malloc(sizeof(liste_Coup));
+    liste_Coup* prem = NULL;
+    liste_Coup* dern = NULL;
+    new_Coup->Joueur = Player;
+    new_Coup->prec = dern;
+    new_Coup->suiv = NULL;
+    if (dern == NULL) {
+        prem = new_Coup;
+        dern = new_Coup;
+    } else {
+        dern->suiv = new_Coup;
+        dern = new_Coup;
+    }
+}
+
+void annuler_Coup(liste_Coup* liste_Coups_Partie){
+    // TODO
+}
