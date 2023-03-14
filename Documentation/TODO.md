@@ -10,7 +10,7 @@
 | Affichage résultat                            | ✓ |
 | Passer tour du joueur (ordinateur)            |   |
 | Annuler coup                                  |   |
-| Arréter partie                                |   |
+| Arréter partie en cours                       | ✓ |
 | Enregistrer partie                            |   |
 | Reprendre partie                              |   |
 | ...                                           |   |

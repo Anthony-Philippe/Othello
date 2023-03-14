@@ -33,17 +33,18 @@ void disp_board(char board[TAILLE][TAILLE]) {
 
 void game_JvJ(char board[TAILLE][TAILLE]){
     bool end_Game = false;
+    bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
     while (!end_Game) {
         CleanWindows
         disp_board(board);
-        pos_Selection(board, Pstart);
+        quitter_partie = pos_Selection(board, Pstart);
+        if(quitter_partie) break;
         if(check_Gagnant(board)) end_Game = true;
         Pstart = (Pstart == P1) ? P2 : P1;
     }
     CleanWindows
-    disp_resultat(board);
-    int waitTemp = scanf("%d", &waitTemp);
+    disp_resultat(board, quitter_partie);
 }
 
 char joueur_Aléatoire(){
@@ -53,7 +54,7 @@ char joueur_Aléatoire(){
     return Pstart = (Paléatoire == 0) ? P1 : P2;
 }
 
-void pos_Selection(char board[TAILLE][TAILLE], char Player) {
+bool pos_Selection(char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
     char colChar;
     char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
@@ -61,6 +62,10 @@ void pos_Selection(char board[TAILLE][TAILLE], char Player) {
     while (!coup_valide){
         printf("P%c, Entrez position: Colonne Ligne → ", Player);
         scanf("%c %d", &colChar, &ligne);
+        if(colChar == 'S'){
+            bool quitter_partie = false;
+            return quitter_partie = true;
+        }
         for (int n = 0; n < TAILLE; n++) {
             if (colChar == col_Board[n]) col = n;
         }
@@ -140,7 +145,8 @@ bool check_Gagnant(char board[TAILLE][TAILLE]) {
     return full_Board || !coup_Possible;
 }
 
-void disp_resultat(char board[TAILLE][TAILLE]) {
+void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
+    if(quitter_partie) return;
     int score_P1 = 0;
     int score_P2 = 0;
     for (int i = 0; i < TAILLE; i++) {
@@ -154,4 +160,25 @@ void disp_resultat(char board[TAILLE][TAILLE]) {
     if (score_P1 > score_P2) printf("Le P1 gagne !\n");
     else if (score_P2 > score_P1) printf("Le P2 gagne !\n");
     else printf("Egalité\n");
+    int waitTemp = scanf("%d", &waitTemp);
+}
+
+void ajout_Coup_liste(char Player){
+    liste_Coup* new_Coup = (liste_Coup*)malloc(sizeof(liste_Coup));
+    liste_Coup* prem = NULL;
+    liste_Coup* dern = NULL;
+    new_Coup->Joueur = Player;
+    new_Coup->prec = dern;
+    new_Coup->suiv = NULL;
+    if (dern == NULL) {
+        prem = new_Coup;
+        dern = new_Coup;
+    } else {
+        dern->suiv = new_Coup;
+        dern = new_Coup;
+    }
+}
+
+void annuler_Coup(liste_Coup* liste_Coups_Partie){
+    // TODO
 }
