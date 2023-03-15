@@ -41,4 +41,20 @@ int menu_Start1(){
 
 	int choix = 0;
 	scanf("%d", &choix);
+	return choix;
+}
+
+int menu_Start2(){
+	printf("\n════════════════════════════════════════════════════════════════════════════\n");
+    printf("                           |      Start Game      |\n");
+	printf("════════════════════════════════════════════════════════════════════════════\n\n");
+	printf("\t1▸ Défier l'ordinateur\n");
+	printf("\t2▸ 2 Joueurs\n");
+	printf("\tAutres ▸ Retour\n");
+    printf("\n");
+	Cursor
+
+	int choix = 0;
+	scanf("%d", &choix);
+	return choix;
 }

@@ -9,7 +9,13 @@ int main(void){
 		int choix = menu();
 		switch(choix){
 			case 1:
-                game_JvJ(board);
+				choix = menu_Start1();
+				if(choix == 1){
+					choix = menu_Start2();
+					if(choix == 1) printf("partie IA");
+					else if(choix == 2) game_JvJ(board);
+				}
+				else if(choix == 2) printf("charger partie");
 				break;
             case 2:
                 menu_Crédits();

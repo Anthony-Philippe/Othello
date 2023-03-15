@@ -29,6 +29,7 @@ typedef struct liste_Coup { // ? Sauvegarde des coups joués durant une partie
 int menu();
 void menu_Crédits();
 int menu_Start1();
+int menu_Start2();
 
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);
