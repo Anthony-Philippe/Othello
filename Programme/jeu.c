@@ -177,7 +177,7 @@ void ajout_Coup_liste(char Player, int ligne, int col){
         prem = new_Coup;
         dern = new_Coup;
     } else {
-        dern->suiv = new_Coup;
+        dern->suiv = NULL;
         dern = new_Coup;
     }
 }
