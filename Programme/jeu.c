@@ -73,6 +73,7 @@ bool pos_Selection(char board[TAILLE][TAILLE], char Player) {
         coup_valide = check_Coup(board, Player, ligne, col);
         if (!coup_valide) printf("Coup invalide\n");
     }
+    ajout_Coup_liste(Player, ligne, col);
     effectuer_Coup(board, Player, ligne, col);
 }
 
@@ -163,11 +164,13 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
     int waitTemp = scanf("%d", &waitTemp);
 }
 
-void ajout_Coup_liste(char Player){
+void ajout_Coup_liste(char Player, int ligne, int col){
     liste_Coup* new_Coup = (liste_Coup*)malloc(sizeof(liste_Coup));
     liste_Coup* prem = NULL;
     liste_Coup* dern = NULL;
     new_Coup->Joueur = Player;
+    new_Coup->coup_Joué[0] = ligne;
+    new_Coup->coup_Joué[1] = col;
     new_Coup->prec = dern;
     new_Coup->suiv = NULL;
     if (dern == NULL) {

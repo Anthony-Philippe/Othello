@@ -42,7 +42,7 @@ bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
-void ajout_Coup_liste(char Player);
+void ajout_Coup_liste(char Player, int ligne, int col);
 void annuler_Coup(liste_Coup* liste_Coups_Partie); // TODO
 
 // * IA
