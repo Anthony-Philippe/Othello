@@ -18,12 +18,20 @@
 #define INFINITY 1000000 // Valeur infinie
 #define NEG_INFINITY -1000000 // Valeur moins l'infini;
 
-typedef struct liste_Coup { // ? Sauvegarde des coups joués durant une partie
+typedef struct FILE_coup FILE_coup; // ? Sauvegarde des coups joués durant une partie
+struct FILE_coup{
     int coup_Joué[2];
     char Joueur;
-    struct liste_Coup* prec;
-    struct liste_Coup* suiv;
-} liste_Coup;
+    FILE_coup* prec;
+    FILE_coup* suiv;
+};
+
+typedef struct LISTE_coup LISTE_coup;
+struct LISTE_coup{
+    int nbCoups;
+    LISTE_coup* premier;
+    LISTE_coup* dernier;
+};
 
 // * Interface
 int menu();
@@ -42,8 +50,8 @@ bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
-void ajout_Coup_liste(char Player, int ligne, int col);
-void annuler_Coup(liste_Coup* liste_Coups_Partie); // TODO
+void ajout_Coup_liste(LISTE_coup * liste_Coups_Partie, char Player, int ligne, int col);
+void annuler_Coup(LISTE_coup * liste_Coups_Partie); // TODO
 
 // * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);

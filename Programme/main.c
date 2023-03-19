@@ -3,6 +3,8 @@
 int main(void){
     char board[TAILLE][TAILLE];
     init_board(board);
+
+	LISTE_coup * liste_Coups_Partie = NULL;
     
     while(1){
         CleanWindows

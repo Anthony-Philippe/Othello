@@ -164,24 +164,22 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
     int waitTemp = scanf("%d", &waitTemp);
 }
 
-void ajout_Coup_liste(char Player, int ligne, int col){
-    liste_Coup* new_Coup = (liste_Coup*)malloc(sizeof(liste_Coup));
-    liste_Coup* prem = NULL;
-    liste_Coup* dern = NULL;
+void ajout_Coup_liste(LISTE_coup * liste_Coups_Partie, char Player, int ligne, int col){
+    FILE_coup * new_Coup = (FILE_coup*)malloc(sizeof(FILE_coup));
     new_Coup->Joueur = Player;
     new_Coup->coup_Joué[0] = ligne;
     new_Coup->coup_Joué[1] = col;
-    new_Coup->prec = dern;
+    new_Coup->prec = liste_Coups_Partie->dernier;
     new_Coup->suiv = NULL;
-    if (dern == NULL) {
-        prem = new_Coup;
-        dern = new_Coup;
+    if (liste_Coups_Partie->premier == NULL) {
+        liste_Coups_Partie->premier = new_Coup;
+		liste_Coups_Partie->dernier = new_Coup;
     } else {
-        dern->suiv = NULL;
-        dern = new_Coup;
+        liste_Coups_Partie->dernier = new_Coup;
     }
+    liste_Coups_Partie->nbCoups++;
 }
 
-void annuler_Coup(liste_Coup* liste_Coups_Partie){
+void annuler_Coup(LISTE_coup* liste_Coups_Partie){
     // TODO
 }
