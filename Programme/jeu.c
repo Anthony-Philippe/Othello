@@ -31,14 +31,14 @@ void disp_board(char board[TAILLE][TAILLE]) {
     printf("\n");
 }
 
-void game_JvJ(char board[TAILLE][TAILLE]){
+void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]){
     bool end_Game = false;
     bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
     while (!end_Game) {
         CleanWindows
         disp_board(board);
-        quitter_partie = pos_Selection(board, Pstart);
+        quitter_partie = pos_Selection(listeC, board, Pstart);
         if(quitter_partie) break;
         if(check_Gagnant(board)) end_Game = true;
         Pstart = (Pstart == P1) ? P2 : P1;
@@ -54,7 +54,7 @@ char joueur_Aléatoire(){
     return Pstart = (Paléatoire == 0) ? P1 : P2;
 }
 
-bool pos_Selection(char board[TAILLE][TAILLE], char Player) {
+bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
     char colChar;
     char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
@@ -73,7 +73,7 @@ bool pos_Selection(char board[TAILLE][TAILLE], char Player) {
         coup_valide = check_Coup(board, Player, ligne, col);
         if (!coup_valide) printf("Coup invalide\n");
     }
-    ajout_Coup_liste(Player, ligne, col);
+    //ajout_Coup_liste(listeC, Player, ligne, col);
     effectuer_Coup(board, Player, ligne, col);
 }
 
@@ -164,22 +164,35 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
     int waitTemp = scanf("%d", &waitTemp);
 }
 
-void ajout_Coup_liste(LISTE_coup * liste_Coups_Partie, char Player, int ligne, int col){
+LISTE_coup * init_listeC(LISTE_coup * listeC){
+	listeC->premier = NULL;
+	listeC->dernier = NULL;
+	listeC->nbCoups = 0;
+    return listeC;
+}
+
+/*void ajout_Coup_liste(LISTE_coup * listeC, char Player, int ligne, int col){ // ! Erreur incompatible pointer type
     FILE_coup * new_Coup = (FILE_coup*)malloc(sizeof(FILE_coup));
     new_Coup->Joueur = Player;
     new_Coup->coup_Joué[0] = ligne;
     new_Coup->coup_Joué[1] = col;
-    new_Coup->prec = liste_Coups_Partie->dernier;
+    new_Coup->prec = listeC->dernier;
     new_Coup->suiv = NULL;
-    if (liste_Coups_Partie->premier == NULL) {
-        liste_Coups_Partie->premier = new_Coup;
-		liste_Coups_Partie->dernier = new_Coup;
-    } else {
-        liste_Coups_Partie->dernier = new_Coup;
-    }
-    liste_Coups_Partie->nbCoups++;
+    if (listeC->premier == NULL) {
+        listeC->premier = new_Coup;
+		listeC->dernier = new_Coup;
+    } else listeC->dernier = new_Coup;
+    listeC->nbCoups++;
 }
 
-void annuler_Coup(LISTE_coup* liste_Coups_Partie){
-    // TODO
-}
+void annuler_Coup(LISTE_coup* listeC){
+    if(listeC->dernier == NULL) return;
+
+    FILE_coup * coupAnnuler = listeC->dernier;
+    listeC->dernier = coupAnnuler->prec;
+
+    if (listeC->dernier == NULL) listeC->premier = NULL;
+
+    free(coupAnnuler);
+    listeC->nbCoups--;
+}*/

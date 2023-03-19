@@ -42,16 +42,17 @@ int menu_Start2();
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
-void game_JvJ(char board[TAILLE][TAILLE]);
+void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
-bool pos_Selection(char board[TAILLE][TAILLE], char Player);
+bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player);
 bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC);
 void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
-void ajout_Coup_liste(LISTE_coup * liste_Coups_Partie, char Player, int ligne, int col);
-void annuler_Coup(LISTE_coup * liste_Coups_Partie); // TODO
+LISTE_coup * init_listeC(LISTE_coup * listeC);
+void ajout_Coup_liste(LISTE_coup * listeC, char Player, int ligne, int col);
+void annuler_Coup(LISTE_coup * listeC);
 
 // * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);
