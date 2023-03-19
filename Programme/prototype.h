@@ -29,8 +29,8 @@ struct FILE_coup{
 typedef struct LISTE_coup LISTE_coup;
 struct LISTE_coup{
     int nbCoups;
-    LISTE_coup* premier;
-    LISTE_coup* dernier;
+    FILE_coup* premier;
+    FILE_coup* dernier;
 };
 
 // * Interface
