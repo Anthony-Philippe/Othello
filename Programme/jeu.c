@@ -181,8 +181,12 @@ void ajout_Coup_liste(LISTE_coup * listeC, char Player, int ligne, int col){
     new_Coup->suiv = NULL;
     if (listeC->premier == NULL) {
         listeC->premier = new_Coup;
-		listeC->dernier = new_Coup;
-    } else listeC->dernier = new_Coup;
+        new_Coup->prec = NULL;
+    } else{
+        listeC->dernier->suiv = new_Coup;
+        new_Coup->prec = listeC->dernier;
+    } 
+    listeC->dernier = new_Coup;
     listeC->nbCoups++;
 }
 
@@ -193,6 +197,7 @@ void annuler_Coup(LISTE_coup* listeC){
     listeC->dernier = coupAnnuler->prec;
 
     if (listeC->dernier == NULL) listeC->premier = NULL;
+    else listeC->dernier->suiv = NULL;
 
     free(coupAnnuler);
     listeC->nbCoups--;
