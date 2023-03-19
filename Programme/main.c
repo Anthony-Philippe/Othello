@@ -5,6 +5,7 @@ int main(void){
     init_board(board);
 
 	LISTE_coup * listeC = init_listeC(listeC);
+	
     
     while(1){
         CleanWindows
@@ -18,6 +19,7 @@ int main(void){
 					else if(choix == 2) game_JvJ(listeC, board);
 				}
 				else if(choix == 2) printf("charger partie");
+				save_Liste(listeC, "partie.txt");
 				break;
             case 2:
                 menu_Crédits();

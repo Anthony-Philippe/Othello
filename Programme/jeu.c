@@ -197,3 +197,15 @@ void annuler_Coup(LISTE_coup* listeC){
     free(coupAnnuler);
     listeC->nbCoups--;
 }
+
+void save_Liste(LISTE_coup * listeC, char* name) {
+    FILE* fichier = fopen(name, "w");
+    if (fichier == NULL) return;
+
+    FILE_coup * coupTPM = listeC->premier;
+    while (coupTPM != NULL) {
+        fprintf(fichier, "%d %d %c\n", coupTPM->coup_Joué[0], coupTPM->coup_Joué[1], coupTPM->Joueur);
+        coupTPM = coupTPM->suiv;
+    }
+    fclose(fichier);
+}
