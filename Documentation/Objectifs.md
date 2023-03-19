@@ -1,8 +1,8 @@
 | Modalités                      |   | 
 | ------------------------------ | - |
 | Modularité / Makefile          | ✓ |
-| Listes chainées / Arbres       |   |
-| Fichiers                       |   |
+| Listes chainées / Arbres       | ~ |
+| Fichiers                       | ~ |
 
 | Exigences technique                           |   |
 | --------------------------------------------- | - |
@@ -11,7 +11,7 @@
 | Joueur doit passer son tour                   |   |
 | Recommencer une partie                        |   |
 | Niveau IA ajustable                           |   |
-| Possibilité d’annuler coups                   |   |
+| Possibilité d’annuler coups                   | ✓ |
 | Arrêter, enregistrer, reprendre une partie    |   |
 | Paramètres d’évaluation enregistrés (fichier) |   |
 

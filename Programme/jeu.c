@@ -31,14 +31,14 @@ void disp_board(char board[TAILLE][TAILLE]) {
     printf("\n");
 }
 
-void game_JvJ(char board[TAILLE][TAILLE]){
+void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]){
     bool end_Game = false;
     bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
     while (!end_Game) {
         CleanWindows
         disp_board(board);
-        quitter_partie = pos_Selection(board, Pstart);
+        quitter_partie = pos_Selection(listeC, board, Pstart);
         if(quitter_partie) break;
         if(check_Gagnant(board)) end_Game = true;
         Pstart = (Pstart == P1) ? P2 : P1;
@@ -54,7 +54,7 @@ char joueur_Aléatoire(){
     return Pstart = (Paléatoire == 0) ? P1 : P2;
 }
 
-bool pos_Selection(char board[TAILLE][TAILLE], char Player) {
+bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
     char colChar;
     char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
@@ -73,6 +73,7 @@ bool pos_Selection(char board[TAILLE][TAILLE], char Player) {
         coup_valide = check_Coup(board, Player, ligne, col);
         if (!coup_valide) printf("Coup invalide\n");
     }
+    ajout_Coup_liste(listeC, ligne, col, Player);
     effectuer_Coup(board, Player, ligne, col);
 }
 
@@ -163,22 +164,67 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
     int waitTemp = scanf("%d", &waitTemp);
 }
 
-void ajout_Coup_liste(char Player){
-    liste_Coup* new_Coup = (liste_Coup*)malloc(sizeof(liste_Coup));
-    liste_Coup* prem = NULL;
-    liste_Coup* dern = NULL;
-    new_Coup->Joueur = Player;
-    new_Coup->prec = dern;
-    new_Coup->suiv = NULL;
-    if (dern == NULL) {
-        prem = new_Coup;
-        dern = new_Coup;
-    } else {
-        dern->suiv = new_Coup;
-        dern = new_Coup;
-    }
+LISTE_coup * init_listeC(LISTE_coup * listeC){
+    listeC = (LISTE_coup*)malloc(sizeof(LISTE_coup));
+	listeC->premier = NULL;
+	listeC->dernier = NULL;
+	listeC->nbCoups = 0;
+    return listeC;
 }
 
-void annuler_Coup(liste_Coup* liste_Coups_Partie){
-    // TODO
+void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player){
+    FILE_coup * new_Coup = (FILE_coup*)malloc(sizeof(FILE_coup));
+    new_Coup->coup_Joué[0] = ligne;
+    new_Coup->coup_Joué[1] = col;
+    new_Coup->Joueur = Player;
+    new_Coup->prec = listeC->dernier;
+    new_Coup->suiv = NULL;
+    if (listeC->premier == NULL) {
+        listeC->premier = new_Coup;
+        new_Coup->prec = NULL;
+    } else{
+        listeC->dernier->suiv = new_Coup;
+        new_Coup->prec = listeC->dernier;
+    } 
+    listeC->dernier = new_Coup;
+    listeC->nbCoups++;
+}
+
+void annuler_Coup(LISTE_coup* listeC){
+    if(listeC->dernier == NULL) return;
+
+    FILE_coup * coupAnnuler = listeC->dernier;
+    listeC->dernier = coupAnnuler->prec;
+
+    if (listeC->dernier == NULL) listeC->premier = NULL;
+    else listeC->dernier->suiv = NULL;
+
+    free(coupAnnuler);
+    listeC->nbCoups--;
+}
+
+void save_Liste(LISTE_coup * listeC, char* name){
+    FILE* fichier = fopen(name, "w");
+    if (fichier == NULL) return;
+
+    FILE_coup * coupTPM = listeC->premier;
+    while (coupTPM != NULL) {
+        fprintf(fichier, "%d %d %c\n", coupTPM->coup_Joué[0], coupTPM->coup_Joué[1], coupTPM->Joueur);
+        coupTPM = coupTPM->suiv;
+    }
+    fclose(fichier);
+}
+
+LISTE_coup * import_Partie(LISTE_coup * listeC, char* name){
+    FILE* fichier = fopen(name, "r");
+    if (fichier == NULL) return NULL;
+
+    int col, ligne;
+    char Joueur;
+    while (fscanf(fichier, "%d %d %c", &col, &ligne, &Joueur) == 3) {
+        ajout_Coup_liste(listeC, ligne, col, Joueur);
+        listeC->nbCoups++;
+    }
+    fclose(fichier);
+    return listeC;
 }

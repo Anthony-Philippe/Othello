@@ -15,4 +15,4 @@ interface.o: $(PG)interface.c
 	gcc -c -Wall -g $(PG)interface.c -lm
 
 clean:
-	$(c) run
+	$(c) run partie.txt

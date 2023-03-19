@@ -19,8 +19,9 @@
 | Autres                                        |   |
 | --------------------------------------------- | - |
 | Menu Principal                                | ✓ |
+| Crédits                                       |   |
 | Quitter jeu                                   | ✓ |
-| Choix JvJ ou JvIA                             |   |
+| Choix JvJ ou JvIA                             | ✓ |
 | ...                                           |   |
 
 
