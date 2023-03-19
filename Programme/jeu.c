@@ -165,6 +165,7 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
 }
 
 LISTE_coup * init_listeC(LISTE_coup * listeC){
+    listeC = (LISTE_coup*)malloc(sizeof(LISTE_coup));
 	listeC->premier = NULL;
 	listeC->dernier = NULL;
 	listeC->nbCoups = 0;
