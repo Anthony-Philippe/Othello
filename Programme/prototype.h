@@ -51,9 +51,10 @@ void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col)
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
 LISTE_coup * init_listeC(LISTE_coup * listeC);
-void ajout_Coup_liste(LISTE_coup * listeC, char Player, int ligne, int col);
+void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player);
 void annuler_Coup(LISTE_coup * listeC);
 void save_Liste(LISTE_coup * listeC, char* name);
+LISTE_coup * import_Partie(LISTE_coup * listeC, char* name);
 
 // * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);

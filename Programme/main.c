@@ -5,7 +5,6 @@ int main(void){
     init_board(board);
 
 	LISTE_coup * listeC = init_listeC(listeC);
-	
     
     while(1){
         CleanWindows

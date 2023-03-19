@@ -73,7 +73,7 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
         coup_valide = check_Coup(board, Player, ligne, col);
         if (!coup_valide) printf("Coup invalide\n");
     }
-    ajout_Coup_liste(listeC, Player, ligne, col);
+    ajout_Coup_liste(listeC, ligne, col, Player);
     effectuer_Coup(board, Player, ligne, col);
 }
 
@@ -172,11 +172,11 @@ LISTE_coup * init_listeC(LISTE_coup * listeC){
     return listeC;
 }
 
-void ajout_Coup_liste(LISTE_coup * listeC, char Player, int ligne, int col){
+void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player){
     FILE_coup * new_Coup = (FILE_coup*)malloc(sizeof(FILE_coup));
-    new_Coup->Joueur = Player;
     new_Coup->coup_Joué[0] = ligne;
     new_Coup->coup_Joué[1] = col;
+    new_Coup->Joueur = Player;
     new_Coup->prec = listeC->dernier;
     new_Coup->suiv = NULL;
     if (listeC->premier == NULL) {
@@ -203,7 +203,7 @@ void annuler_Coup(LISTE_coup* listeC){
     listeC->nbCoups--;
 }
 
-void save_Liste(LISTE_coup * listeC, char* name) {
+void save_Liste(LISTE_coup * listeC, char* name){
     FILE* fichier = fopen(name, "w");
     if (fichier == NULL) return;
 
@@ -213,4 +213,18 @@ void save_Liste(LISTE_coup * listeC, char* name) {
         coupTPM = coupTPM->suiv;
     }
     fclose(fichier);
+}
+
+LISTE_coup * import_Partie(LISTE_coup * listeC, char* name){
+    FILE* fichier = fopen(name, "r");
+    if (fichier == NULL) return NULL;
+
+    int col, ligne;
+    char Joueur;
+    while (fscanf(fichier, "%d %d %c", &col, &ligne, &Joueur) == 3) {
+        ajout_Coup_liste(listeC, ligne, col, Joueur);
+        listeC->nbCoups++;
+    }
+    fclose(fichier);
+    return listeC;
 }
