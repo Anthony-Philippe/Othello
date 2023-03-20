@@ -57,7 +57,7 @@ void annuler_Coup(LISTE_coup * listeC);
 void save_Liste(LISTE_coup * listeC, char* name);
 LISTE_coup * import_Liste_coup(LISTE_coup * listeC, char* name);
 void save_Partie(char board[TAILLE][TAILLE], char Player, char* name);
-void import_Partie(char board[TAILLE][TAILLE], char* name);
+void import_Partie(char board[TAILLE][TAILLE], char* Player, char* name);
 
 // * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);

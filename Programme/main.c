@@ -23,7 +23,11 @@ int main(void){
 					if(choix == 1) printf("partie IA");
 					else if(choix == 2) game_JvJ(listeC, board);
 				}
-				else if(choix == 2) printf("charger partie");
+				else if(choix == 2){
+					char Dernier_Joueur;
+					import_Partie(board, &Dernier_Joueur, "partie.txt");
+					game_JvJ(listeC, board);
+				}
 				save_Liste(listeC, "liste_Coup.txt");
 				break;
             case 2:

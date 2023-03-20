@@ -244,9 +244,16 @@ void save_Partie(char board[TAILLE][TAILLE], char Player, char* name){
     fclose(fichier);
 }
 
-void import_Partie(char board[TAILLE][TAILLE], char* name){
+void import_Partie(char board[TAILLE][TAILLE], char* Player, char* name){
     FILE* fichier = fopen(name, "r");
     if (fichier == NULL) return;
 
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            fscanf(fichier, " %c", &board[i][j]);
+            if(board[i][j] == '~') board[i][j] = ' ';
+        }
+    }
+    fscanf(fichier, " %c", Player);
     fclose(fichier);
 }
