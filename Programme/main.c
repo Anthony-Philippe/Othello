@@ -10,6 +10,12 @@ int main(void){
         CleanWindows
 		int choix = menu();
 		switch(choix){
+			default:
+				couleur("31");
+				printf("\t Fermeture \n");
+				couleur("0");
+				return 0;
+				break;
 			case 1:
 				choix = menu_Start1();
 				if(choix == 1){
@@ -22,12 +28,6 @@ int main(void){
 				break;
             case 2:
                 menu_Crédits();
-				break;
-			default:
-				couleur("31");
-				printf("\t Fermeture \n");
-				couleur("0");
-				return 0;
 				break;
 		}
 	}
