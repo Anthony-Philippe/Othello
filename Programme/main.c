@@ -10,6 +10,12 @@ int main(void){
         CleanWindows
 		int choix = menu();
 		switch(choix){
+			default:
+				couleur("31");
+				printf("\t Fermeture \n");
+				couleur("0");
+				return 0;
+				break;
 			case 1:
 				choix = menu_Start1();
 				if(choix == 1){
@@ -18,16 +24,10 @@ int main(void){
 					else if(choix == 2) game_JvJ(listeC, board);
 				}
 				else if(choix == 2) printf("charger partie");
-				save_Liste(listeC, "partie.txt");
+				save_Liste(listeC, "liste_Coup.txt");
 				break;
             case 2:
                 menu_Crédits();
-				break;
-			default:
-				couleur("31");
-				printf("\t Fermeture \n");
-				couleur("0");
-				return 0;
 				break;
 		}
 	}

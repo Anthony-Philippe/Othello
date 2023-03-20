@@ -1,8 +1,8 @@
 | Modalités                      |   | 
 | ------------------------------ | - |
 | Modularité / Makefile          | ✓ |
-| Listes chainées / Arbres       | ~ |
-| Fichiers                       | ~ |
+| Listes chainées / Arbres       | ✓ |
+| Fichiers                       | ✓ |
 
 | Exigences technique                           |   |
 | --------------------------------------------- | - |

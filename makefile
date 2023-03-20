@@ -15,4 +15,4 @@ interface.o: $(PG)interface.c
 	gcc -c -Wall -g $(PG)interface.c -lm
 
 clean:
-	$(c) run partie.txt
+	$(c) run partie.txt liste_Coup.txt

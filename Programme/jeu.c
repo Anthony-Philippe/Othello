@@ -215,7 +215,7 @@ void save_Liste(LISTE_coup * listeC, char* name){
     fclose(fichier);
 }
 
-LISTE_coup * import_Partie(LISTE_coup * listeC, char* name){
+LISTE_coup * import_Liste_coup(LISTE_coup * listeC, char* name){
     FILE* fichier = fopen(name, "r");
     if (fichier == NULL) return NULL;
 
@@ -227,4 +227,26 @@ LISTE_coup * import_Partie(LISTE_coup * listeC, char* name){
     }
     fclose(fichier);
     return listeC;
+}
+
+void save_Partie(char board[TAILLE][TAILLE], char Player, char* name){
+    FILE* fichier = fopen(name, "r");
+    if (fichier == NULL) return;
+
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            if(board[i][j] == ' ') board[i][j] = '~';
+            fprintf(fichier, "%c", board[i][j]);
+        }
+        fprintf(fichier, "\n");
+    }
+    fprintf(fichier, "%c", Player);
+    fclose(fichier);
+}
+
+void import_Partie(char board[TAILLE][TAILLE], char* name){
+    FILE* fichier = fopen(name, "r");
+    if (fichier == NULL) return;
+
+    fclose(fichier);
 }
