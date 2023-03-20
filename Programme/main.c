@@ -18,7 +18,7 @@ int main(void){
 					else if(choix == 2) game_JvJ(listeC, board);
 				}
 				else if(choix == 2) printf("charger partie");
-				save_Liste(listeC, "partie.txt");
+				save_Liste(listeC, "liste_Coup.txt");
 				break;
             case 2:
                 menu_Crédits();
