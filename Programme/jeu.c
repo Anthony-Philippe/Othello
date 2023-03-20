@@ -243,3 +243,10 @@ void save_Partie(char board[TAILLE][TAILLE], char Player, char* name){
     fprintf(fichier, "%c", Player);
     fclose(fichier);
 }
+
+void import_Partie(char board[TAILLE][TAILLE], char* name){
+    FILE* fichier = fopen(name, "r");
+    if (fichier == NULL) return;
+
+    fclose(fichier);
+}
