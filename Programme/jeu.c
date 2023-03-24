@@ -11,7 +11,6 @@ void init_board(char board[TAILLE][TAILLE]) {
 }
 
 void disp_board(char board[TAILLE][TAILLE]) {
-    //char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     printf("\n  ");
     for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
     printf("\n");
@@ -81,8 +80,6 @@ bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
 
 bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
-    //char colChar;
-    //char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     bool coup_valide = false;
     while (!coup_valide){
         printf("P%c, Entrez position: Colonne Ligne → ", Player);
@@ -91,9 +88,6 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
             bool quitter_partie = false;
             return quitter_partie = true;
         }
-        /*for (int n = 0; n < TAILLE; n++) {
-            if (colChar == col_Board[n]) col = n;
-        }*/
         col;
         ligne;
         if(board[ligne][col] == '~'){
@@ -101,10 +95,8 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
             coup_valide = true;
         } 
         else printf("Coup invalide\n");
-        //coup_valide = check_Coup(board, Player, ligne, col);
     }
     ajout_Coup_liste(listeC, ligne, col, Player);
-    //effectuer_Coup(board, Player, ligne, col);
 }
 
 /*bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
