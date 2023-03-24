@@ -62,13 +62,15 @@ bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
             if (board[Lig][Col] == VIDE) {
                 for (int DirH = -1; DirH <= 1; DirH++) {
                     for (int DirL = -1; DirL <= 1; DirL++) {
-                        if ((DirH != 0 || DirL != 0) && (Lig + DirH >= 0 && Lig + DirH < 8 && Col + DirL >= 0 && Col + DirL < 8) && board[Lig + DirH][Col + DirL] == Player2) {
-                            for (int m = Lig + DirH, n = Col + DirL; m >= 0 && m < 8 && n >= 0 && n < 8; m += DirH, n += DirL) {
-                                if (board[m][n] == ' ') break;
-                                else if (board[m][n] == Player) {
-                                    board[Lig][Col] = '~';
-                                    break;
-                                }
+                        if ((DirH != 0 || DirL != 0)
+                            && (Lig + DirH >= 0 && Lig + DirH < 8 && Col + DirL >= 0 && Col + DirL < 8)
+                            && board[Lig + DirH][Col + DirL] == Player2) {
+                                for (int PosX = Lig + DirH, PosY = Col + DirL; PosX >= 0 && PosX < 8 && PosY >= 0 && PosY < 8; PosX += DirH, PosY += DirL) {
+                                    if (board[PosX][PosY] == ' ') break;
+                                    else if (board[PosX][PosY] == Player) {
+                                        board[Lig][Col] = '~';
+                                        break;
+                                    }
                             }
                         }
                     }
