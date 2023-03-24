@@ -101,58 +101,6 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
     ajout_Coup_liste(listeC, ligne, col, Player);
 }
 
-/*bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
-    bool capture_Valide = false;
-    if(board[ligne][col] != '~') return false;
-    else capture_Valide = true;
-    for (int DirL = -1; DirL <= 1; DirL++) {
-        for (int DirC = -1; DirC <= 1; DirC++) {
-            if (DirL == 0 && DirC == 0) continue;
-            bool capture = check_Direction(board, Player, ligne, col, DirL, DirC);
-            if (capture) {
-                capture_Valide = true;
-                break;
-            }
-        }
-        if (capture_Valide) break;
-    }
-    return capture_Valide;
-}*/
-
-/*bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC){
-    int i = ligne + DirL;
-    int j = col + DirC;
-    bool capture = false;
-    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != '~') {
-        if (board[i][j] == Player) {
-            capture = true;
-            break;
-        }
-        i += DirL;
-        j += DirC;
-    }
-    return capture;
-}*/
-
-/*void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col) {
-    board[ligne][col] = Player;
-    for (int DirL = -1; DirL <= 1; DirL++) {
-        for (int DirC = -1; DirC <= 1; DirC++) {
-            if (DirL == 0 && DirC == 0) continue;
-            bool capture = check_Direction(board, Player, ligne, col, DirL, DirC);
-            if (capture) {
-                int i = ligne + DirL;
-                int j = col + DirC;
-                while ((i < TAILLE || j < TAILLE) && board[i][j] != VIDE) {
-                    if(board[i][j] != Player) board[i][j] = Player;
-                    i += DirL;
-                    j += DirC;
-                }
-            }
-        }
-    }
-}*/
-
 bool check_Gagnant(char board[TAILLE][TAILLE]) {
     bool full_Board = true;
     bool coup_Possible = false;
