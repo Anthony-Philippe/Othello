@@ -54,7 +54,7 @@ char joueur_Aléatoire(){
     return Pstart = (Paléatoire == 0) ? P1 : P2;
 }
 
-bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
+void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
     char Player2 = (Player == 'X') ? 'O' : 'X';
     for (int Lig = 0; Lig < TAILLE; Lig++) {
         for (int Col = 0; Col < TAILLE; Col++) {
@@ -71,7 +71,7 @@ bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
                                         board[Lig][Col] = '~';
                                         break;
                                     }
-                            }
+                                }
                         }
                     }
                 }
@@ -95,21 +95,20 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
 }
 
 bool check_Gagnant(char board[TAILLE][TAILLE]) {
-    bool full_Board = true;
-    bool coup_Possible = false;
+    bool Gagnant = false;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
-            if (board[i][j] == VIDE || board[i][j] == '~') {
-                full_Board = false;
-                if (check_Pos_Jouable(board, P1) || check_Pos_Jouable(board, P2)) {
-                    coup_Possible = true;
-                    break;
-                }
+            if (board[i][j] == '~') board[i][j] = VIDE;
+            check_Pos_Jouable(board, P1);
+            if (board[i][j] == '~') return Gagnant = false;
+            else{
+                check_Pos_Jouable(board, P2);
+                if (board[i][j] == '~') return Gagnant  = false;
             }
+            
         }
-        if (coup_Possible) break;
     }
-    return full_Board || !coup_Possible;
+    return Gagnant;
 }
 
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
