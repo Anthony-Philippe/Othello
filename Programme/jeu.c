@@ -11,23 +11,23 @@ void init_board(char board[TAILLE][TAILLE]) {
 }
 
 void disp_board(char board[TAILLE][TAILLE]) {
-    char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+    //char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     printf("\n  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%c ", col_Board[Col]);
+    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
     printf("\n");
     for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
-        printf("%d ", Ligne+1);
+        printf("%d ", Ligne);
         for (int Col = 0; Col < TAILLE; Col++) {
             if(board[Ligne][Col] == P1) couleur("31");
             if(board[Ligne][Col] == P2) couleur("34");
             printf("%c ", board[Ligne][Col]);
             couleur("0");
         }
-        printf("%d ", Ligne+1);
+        printf("%d ", Ligne);
         printf("\n");
     }
     printf("  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%c ", col_Board[Col]);
+    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
     printf("\n");
 }
 
@@ -37,6 +37,7 @@ void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]){
     char Pstart = joueur_Aléatoire();
     while (!end_Game) {
         CleanWindows
+        check_Pos_Jouable(board, Pstart);
         disp_board(board);
         quitter_partie = pos_Selection(listeC, board, Pstart);
         if(quitter_partie) break;
@@ -54,32 +55,62 @@ char joueur_Aléatoire(){
     return Pstart = (Paléatoire == 0) ? P1 : P2;
 }
 
+bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
+    char Player2 = (Player == 'X') ? 'O' : 'X';
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            if (board[i][j] == '~') board[i][j] = VIDE;
+            if (board[i][j] == VIDE) {
+                for (int k = -1; k <= 1; k++) {
+                    for (int l = -1; l <= 1; l++) {
+                        if ((k != 0 || l != 0) && (i + k >= 0 && i + k < 8 && j + l >= 0 && j + l < 8) && board[i + k][j + l] == Player2) {
+                            for (int m = i + k, n = j + l; m >= 0 && m < 8 && n >= 0 && n < 8; m += k, n += l) {
+                                if (board[m][n] == ' ') break;
+                                else if (board[m][n] == Player) {
+                                    board[i][j] = '~';
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
-    char colChar;
-    char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+    //char colChar;
+    //char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     bool coup_valide = false;
     while (!coup_valide){
         printf("P%c, Entrez position: Colonne Ligne → ", Player);
-        scanf("%c %d", &colChar, &ligne);
-        if(colChar == 'S'){
+        scanf("%d %d", &col, &ligne);
+        if(col == '0'){
             bool quitter_partie = false;
             return quitter_partie = true;
         }
-        for (int n = 0; n < TAILLE; n++) {
+        /*for (int n = 0; n < TAILLE; n++) {
             if (colChar == col_Board[n]) col = n;
-        }
-        ligne--;
-        coup_valide = check_Coup(board, Player, ligne, col);
-        if (!coup_valide) printf("Coup invalide\n");
+        }*/
+        col;
+        ligne;
+        if(board[ligne][col] == '~'){
+            board[ligne][col] = Player;
+            coup_valide = true;
+        } 
+        else printf("Coup invalide\n");
+        //coup_valide = check_Coup(board, Player, ligne, col);
     }
     ajout_Coup_liste(listeC, ligne, col, Player);
-    effectuer_Coup(board, Player, ligne, col);
+    //effectuer_Coup(board, Player, ligne, col);
 }
 
-bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
-    if (board[ligne][col] != VIDE) return false;
+/*bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
     bool capture_Valide = false;
+    if(board[ligne][col] != '~') return false;
+    else capture_Valide = true;
     for (int DirL = -1; DirL <= 1; DirL++) {
         for (int DirC = -1; DirC <= 1; DirC++) {
             if (DirL == 0 && DirC == 0) continue;
@@ -92,13 +123,13 @@ bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
         if (capture_Valide) break;
     }
     return capture_Valide;
-}
+}*/
 
-bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC){
+/*bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC){
     int i = ligne + DirL;
     int j = col + DirC;
     bool capture = false;
-    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
+    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != '~') {
         if (board[i][j] == Player) {
             capture = true;
             break;
@@ -107,9 +138,9 @@ bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col
         j += DirC;
     }
     return capture;
-}
+}*/
 
-void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col) {
+/*void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col) {
     board[ligne][col] = Player;
     for (int DirL = -1; DirL <= 1; DirL++) {
         for (int DirC = -1; DirC <= 1; DirC++) {
@@ -126,16 +157,16 @@ void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col)
             }
         }
     }
-}
+}*/
 
 bool check_Gagnant(char board[TAILLE][TAILLE]) {
     bool full_Board = true;
     bool coup_Possible = false;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
-            if (board[i][j] == VIDE) {
+            if (board[i][j] == VIDE || board[i][j] == '~') {
                 full_Board = false;
-                if (check_Coup(board, P1, i, j) || check_Coup(board, P2, i, j)) {
+                if (check_Pos_Jouable(board, P1) || check_Pos_Jouable(board, P2)) {
                     coup_Possible = true;
                     break;
                 }
