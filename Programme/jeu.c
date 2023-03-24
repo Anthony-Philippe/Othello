@@ -96,18 +96,14 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
 
 bool check_Gagnant(char board[TAILLE][TAILLE]) {
     bool Gagnant = false;
+    int compteur = 0;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
             if (board[i][j] == '~') board[i][j] = VIDE;
-            check_Pos_Jouable(board, P1);
-            if (board[i][j] == '~') return Gagnant = false;
-            else{
-                check_Pos_Jouable(board, P2);
-                if (board[i][j] == '~') return Gagnant  = false;
-            }
-            
+            if (board[i][j] != VIDE) compteur++;
         }
     }
+    if (compteur == TAILLE * TAILLE+4) Gagnant = true;
     return Gagnant;
 }
 
