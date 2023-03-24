@@ -82,22 +82,15 @@ bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
 
 bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
     int ligne, col;
-    bool coup_valide = false;
-    while (!coup_valide){
+    bool quitter_partie = false;
+    while (1){
         printf("P%c, Entrez position: Colonne Ligne → ", Player);
         scanf("%d %d", &col, &ligne);
-        if(col == '0'){
-            bool quitter_partie = false;
-            return quitter_partie = true;
-        }
-        col;
-        ligne;
-        if(board[ligne][col] == '~'){
-            board[ligne][col] = Player;
-            coup_valide = true;
-        } 
+        if(col == 0) return quitter_partie = true;
+        if(board[ligne][col] == '~') break;
         else printf("Coup invalide\n");
     }
+    board[ligne][col] = Player;
     ajout_Coup_liste(listeC, ligne, col, Player);
 }
 
