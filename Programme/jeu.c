@@ -56,17 +56,17 @@ char joueur_Aléatoire(){
 
 bool check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
     char Player2 = (Player == 'X') ? 'O' : 'X';
-    for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
-            if (board[i][j] == '~') board[i][j] = VIDE;
-            if (board[i][j] == VIDE) {
-                for (int k = -1; k <= 1; k++) {
-                    for (int l = -1; l <= 1; l++) {
-                        if ((k != 0 || l != 0) && (i + k >= 0 && i + k < 8 && j + l >= 0 && j + l < 8) && board[i + k][j + l] == Player2) {
-                            for (int m = i + k, n = j + l; m >= 0 && m < 8 && n >= 0 && n < 8; m += k, n += l) {
+    for (int Lig = 0; Lig < TAILLE; Lig++) {
+        for (int Col = 0; Col < TAILLE; Col++) {
+            if (board[Lig][Col] == '~') board[Lig][Col] = VIDE;
+            if (board[Lig][Col] == VIDE) {
+                for (int DirH = -1; DirH <= 1; DirH++) {
+                    for (int DirL = -1; DirL <= 1; DirL++) {
+                        if ((DirH != 0 || DirL != 0) && (Lig + DirH >= 0 && Lig + DirH < 8 && Col + DirL >= 0 && Col + DirL < 8) && board[Lig + DirH][Col + DirL] == Player2) {
+                            for (int m = Lig + DirH, n = Col + DirL; m >= 0 && m < 8 && n >= 0 && n < 8; m += DirH, n += DirL) {
                                 if (board[m][n] == ' ') break;
                                 else if (board[m][n] == Player) {
-                                    board[i][j] = '~';
+                                    board[Lig][Col] = '~';
                                     break;
                                 }
                             }
