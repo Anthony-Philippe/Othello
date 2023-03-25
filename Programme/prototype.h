@@ -46,6 +46,7 @@ void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
 void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player);
 bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player);
+void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
 

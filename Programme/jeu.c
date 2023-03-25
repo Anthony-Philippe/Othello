@@ -1,6 +1,6 @@
 #include "prototype.h"
 
-void init_board(char board[TAILLE][TAILLE]) {
+void init_board(char board[TAILLE][TAILLE]){
     for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
         for (int Col = 0; Col < TAILLE; Col++) {
             if ((Ligne == 3 && Col == 3) || (Ligne == 4 && Col == 4)) board[Ligne][Col] = P1;
@@ -10,7 +10,7 @@ void init_board(char board[TAILLE][TAILLE]) {
     }
 }
 
-void disp_board(char board[TAILLE][TAILLE]) {
+void disp_board(char board[TAILLE][TAILLE]){
     printf("\n  ");
     for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
     printf("\n");
@@ -80,22 +80,35 @@ void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
     }
 }
 
-bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
+bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player){
     int ligne, col;
     bool quitter_partie = false;
     while (1){
-        printf("P%c, Entrez position: Colonne Ligne → ", Player);
-        scanf("%d %d", &col, &ligne);
+        printf("P%c, Entrez position: Ligne Colonne → ", Player);
+        scanf("%d %d", &ligne, &col);
         if(col == 0) return quitter_partie = true;
         if(board[ligne][col] == '~') break;
         else printf("Coup invalide\n");
     }
-    board[ligne][col] = Player;
+    place_Selection(board, ligne, col, Player);
     ajout_Coup_liste(listeC, ligne, col, Player);
     return quitter_partie;
 }
 
-bool check_Gagnant(char board[TAILLE][TAILLE]) {
+void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player){
+    board[ligne][col] = Player;
+    char Player2 = (Player == 'X') ? 'O' : 'X';
+    for (int DirH = -1; DirH <= 1; DirH++) {
+        for (int DirL = -1; DirL <= 1; DirL++) {
+            if ((ligne + DirH >= 0 && ligne + DirH < 8 && col + DirL >= 0 && col + DirL < 8)
+                && board[ligne + DirH][col + DirL] == Player2) {
+                    board[ligne + DirH][col + DirL] = Player;
+            }
+        }
+    }
+}
+
+bool check_Gagnant(char board[TAILLE][TAILLE]){
     bool Gagnant = false;
     int compteur = 0;
     for (int i = 0; i < TAILLE; i++) {
@@ -108,7 +121,7 @@ bool check_Gagnant(char board[TAILLE][TAILLE]) {
     return Gagnant;
 }
 
-void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
+void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
     if(quitter_partie) return;
     int score_P1 = 0;
     int score_P2 = 0;
