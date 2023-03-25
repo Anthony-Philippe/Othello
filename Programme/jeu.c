@@ -92,6 +92,7 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
     }
     board[ligne][col] = Player;
     ajout_Coup_liste(listeC, ligne, col, Player);
+    return quitter_partie;
 }
 
 bool check_Gagnant(char board[TAILLE][TAILLE]) {
