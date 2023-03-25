@@ -1,6 +1,6 @@
 #include "prototype.h"
 
-void init_board(char board[TAILLE][TAILLE]) {
+void init_board(char board[TAILLE][TAILLE]){
     for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
         for (int Col = 0; Col < TAILLE; Col++) {
             if ((Ligne == 3 && Col == 3) || (Ligne == 4 && Col == 4)) board[Ligne][Col] = P1;
@@ -10,24 +10,23 @@ void init_board(char board[TAILLE][TAILLE]) {
     }
 }
 
-void disp_board(char board[TAILLE][TAILLE]) {
-    char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+void disp_board(char board[TAILLE][TAILLE]){
     printf("\n  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%c ", col_Board[Col]);
+    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
     printf("\n");
     for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
-        printf("%d ", Ligne+1);
+        printf("%d ", Ligne);
         for (int Col = 0; Col < TAILLE; Col++) {
             if(board[Ligne][Col] == P1) couleur("31");
             if(board[Ligne][Col] == P2) couleur("34");
             printf("%c ", board[Ligne][Col]);
             couleur("0");
         }
-        printf("%d ", Ligne+1);
+        printf("%d ", Ligne);
         printf("\n");
     }
     printf("  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%c ", col_Board[Col]);
+    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
     printf("\n");
 }
 
@@ -37,6 +36,7 @@ void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]){
     char Pstart = joueur_Aléatoire();
     while (!end_Game) {
         CleanWindows
+        check_Pos_Jouable(board, Pstart);
         disp_board(board);
         quitter_partie = pos_Selection(listeC, board, Pstart);
         if(quitter_partie) break;
@@ -54,49 +54,70 @@ char joueur_Aléatoire(){
     return Pstart = (Paléatoire == 0) ? P1 : P2;
 }
 
-bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player) {
-    int ligne, col;
-    char colChar;
-    char col_Board[TAILLE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
-    bool coup_valide = false;
-    while (!coup_valide){
-        printf("P%c, Entrez position: Colonne Ligne → ", Player);
-        scanf("%c %d", &colChar, &ligne);
-        if(colChar == 'S'){
-            bool quitter_partie = false;
-            return quitter_partie = true;
-        }
-        for (int n = 0; n < TAILLE; n++) {
-            if (colChar == col_Board[n]) col = n;
-        }
-        ligne--;
-        coup_valide = check_Coup(board, Player, ligne, col);
-        if (!coup_valide) printf("Coup invalide\n");
-    }
-    ajout_Coup_liste(listeC, ligne, col, Player);
-    effectuer_Coup(board, Player, ligne, col);
-}
-
-bool check_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col){
-    if (board[ligne][col] != VIDE) return false;
-    bool capture_Valide = false;
-    for (int DirL = -1; DirL <= 1; DirL++) {
-        for (int DirC = -1; DirC <= 1; DirC++) {
-            if (DirL == 0 && DirC == 0) continue;
-            bool capture = check_Direction(board, Player, ligne, col, DirL, DirC);
-            if (capture) {
-                capture_Valide = true;
-                break;
+void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
+    char Player2 = (Player == 'X') ? 'O' : 'X';
+    for (int Lig = 0; Lig < TAILLE; Lig++) {
+        for (int Col = 0; Col < TAILLE; Col++) {
+            if (board[Lig][Col] == '~') board[Lig][Col] = VIDE;
+            if (board[Lig][Col] == VIDE) {
+                for (int DirH = -1; DirH <= 1; DirH++) {
+                    for (int DirL = -1; DirL <= 1; DirL++) {
+                        if ((DirH != 0 || DirL != 0)
+                            && (Lig + DirH >= 0 && Lig + DirH < 8 && Col + DirL >= 0 && Col + DirL < 8)
+                            && board[Lig + DirH][Col + DirL] == Player2) {
+                                for (int PosX = Lig + DirH, PosY = Col + DirL; PosX >= 0 && PosX < 8 && PosY >= 0 && PosY < 8; PosX += DirH, PosY += DirL) {
+                                    if (board[PosX][PosY] == ' ') break;
+                                    else if (board[PosX][PosY] == Player) {
+                                        board[Lig][Col] = '~';
+                                        break;
+                                    }
+                                }
+                        }
+                    }
+                }
             }
         }
-        if (capture_Valide) break;
     }
-    return capture_Valide;
 }
 
-bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirC){
+bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player){
+    int ligne, col;
+    bool quitter_partie = false;
+    while (1){
+        printf("P%c, Entrez position: Ligne Colonne → ", Player);
+        scanf("%d %d", &ligne, &col);
+        if(col == 0) return quitter_partie = true;
+        if(board[ligne][col] == '~') break;
+        else printf("Coup invalide\n");
+    }
+    place_Selection(board, ligne, col, Player);
+    ajout_Coup_liste(listeC, ligne, col, Player);
+    return quitter_partie;
+}
+
+void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player){
+    board[ligne][col] = Player;
+    char Player2 = (Player == 'X') ? 'O' : 'X';
+    for (int DirH = -1; DirH <= 1; DirH++) {
+        for (int DirL = -1; DirL <= 1; DirL++) {
+            if (DirL == 0 && DirH == 0) continue;
+            bool capture = check_Direction(board, Player, ligne, col, DirL, DirH);
+            if (capture) {
+                int i = ligne + DirL;
+                int j = col + DirH;
+                while ((i < TAILLE || j < TAILLE) && board[i][j] != VIDE) {
+                    if(board[i][j] == Player2) board[i][j] = Player;
+                    i += DirL;
+                    j += DirH;
+                }
+            }
+        }
+    }
+}
+
+bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirH){
     int i = ligne + DirL;
-    int j = col + DirC;
+    int j = col + DirH;
     bool capture = false;
     while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
         if (board[i][j] == Player) {
@@ -104,49 +125,25 @@ bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col
             break;
         }
         i += DirL;
-        j += DirC;
+        j += DirH;
     }
     return capture;
 }
 
-void effectuer_Coup(char board[TAILLE][TAILLE], char Player, int ligne, int col) {
-    board[ligne][col] = Player;
-    for (int DirL = -1; DirL <= 1; DirL++) {
-        for (int DirC = -1; DirC <= 1; DirC++) {
-            if (DirL == 0 && DirC == 0) continue;
-            bool capture = check_Direction(board, Player, ligne, col, DirL, DirC);
-            if (capture) {
-                int i = ligne + DirL;
-                int j = col + DirC;
-                while ((i < TAILLE || j < TAILLE) && board[i][j] != VIDE) {
-                    if(board[i][j] != Player) board[i][j] = Player;
-                    i += DirL;
-                    j += DirC;
-                }
-            }
-        }
-    }
-}
-
-bool check_Gagnant(char board[TAILLE][TAILLE]) {
-    bool full_Board = true;
-    bool coup_Possible = false;
+bool check_Gagnant(char board[TAILLE][TAILLE]){
+    bool Gagnant = false;
+    int compteur = 0;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
-            if (board[i][j] == VIDE) {
-                full_Board = false;
-                if (check_Coup(board, P1, i, j) || check_Coup(board, P2, i, j)) {
-                    coup_Possible = true;
-                    break;
-                }
-            }
+            if (board[i][j] == '~') board[i][j] = VIDE;
+            if (board[i][j] != VIDE) compteur++;
         }
-        if (coup_Possible) break;
     }
-    return full_Board || !coup_Possible;
+    if (compteur == TAILLE * TAILLE+4) Gagnant = true;
+    return Gagnant;
 }
 
-void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie) {
+void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
     if(quitter_partie) return;
     int score_P1 = 0;
     int score_P2 = 0;
