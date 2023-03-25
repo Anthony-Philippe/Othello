@@ -5,7 +5,7 @@
 | Joueur aléatoire                              | ✓ |
 | Sélection case                                | ✓ |
 | Vérification placement                        | ✓ |
-| Placement pion                                |   |
+| Placement pion                                | ✓ |
 | Vérification gagnant / égalité                | ✓ |
 | Affichage résultat                            | ✓ |
 | Passer tour du joueur (ordinateur)            |   |
