@@ -100,12 +100,34 @@ void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player
     char Player2 = (Player == 'X') ? 'O' : 'X';
     for (int DirH = -1; DirH <= 1; DirH++) {
         for (int DirL = -1; DirL <= 1; DirL++) {
-            if ((ligne + DirH >= 0 && ligne + DirH < 8 && col + DirL >= 0 && col + DirL < 8)
-                && board[ligne + DirH][col + DirL] == Player2) {
-                    board[ligne + DirH][col + DirL] = Player;
+            if (DirL == 0 && DirH == 0) continue;
+            bool capture = check_Direction(board, Player, ligne, col, DirL, DirH);
+            if (capture) {
+                int i = ligne + DirL;
+                int j = col + DirH;
+                while ((i < TAILLE || j < TAILLE) && board[i][j] != VIDE) {
+                    if(board[i][j] == Player2) board[i][j] = Player;
+                    i += DirL;
+                    j += DirH;
+                }
             }
         }
     }
+}
+
+bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirH){
+    int i = ligne + DirL;
+    int j = col + DirH;
+    bool capture = false;
+    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
+        if (board[i][j] == Player) {
+            capture = true;
+            break;
+        }
+        i += DirL;
+        j += DirH;
+    }
+    return capture;
 }
 
 bool check_Gagnant(char board[TAILLE][TAILLE]){
