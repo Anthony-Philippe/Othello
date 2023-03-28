@@ -199,6 +199,18 @@ void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player){
     p->nbCoups++;
 }
 
+void annuler_Coup(Partie * p){
+    if (p->dernier == NULL) return;
+
+    liste_Coup * last_Coup = p->dernier;
+    p->dernier = last_Coup->prec;
+    if (p->dernier != NULL) p->dernier->suiv = NULL;
+    else p->premier = NULL;
+    p->nbCoups--;
+    
+    free(last_Coup);
+}
+
 /*LISTE_coup * init_listeC(LISTE_coup * listeC){
     listeC = (LISTE_coup*)malloc(sizeof(LISTE_coup));
 	listeC->premier = NULL;
