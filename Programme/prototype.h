@@ -42,10 +42,10 @@ int menu_Start2();
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
-void game_JvJ(liste_Coup * C_board, char board[TAILLE][TAILLE]);
+void game_JvJ(Partie * p, char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
 void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player);
-bool pos_Selection(liste_Coup * C_board, char board[TAILLE][TAILLE], char Player);
+bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player);
 void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player);
 bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirH);
 bool check_Gagnant(char board[TAILLE][TAILLE]);

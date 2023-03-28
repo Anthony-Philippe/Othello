@@ -30,7 +30,7 @@ void disp_board(char board[TAILLE][TAILLE]){
     printf("\n");
 }
 
-void game_JvJ(liste_Coup * C_board, char board[TAILLE][TAILLE]){
+void game_JvJ(Partie * p, char board[TAILLE][TAILLE]){
     bool end_Game = false;
     bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
@@ -38,7 +38,7 @@ void game_JvJ(liste_Coup * C_board, char board[TAILLE][TAILLE]){
         CleanWindows
         check_Pos_Jouable(board, Pstart);
         disp_board(board);
-        quitter_partie = pos_Selection(C_board, board, Pstart);
+        quitter_partie = pos_Selection(p, board, Pstart);
         if(quitter_partie) break;
         if(check_Gagnant(board)) end_Game = true;
         Pstart = (Pstart == P1) ? P2 : P1;
@@ -80,7 +80,7 @@ void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
     }
 }
 
-bool pos_Selection(liste_Coup * C_board, char board[TAILLE][TAILLE], char Player){
+bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
     int ligne, col;
     bool quitter_partie = false;
     while (1){
@@ -249,7 +249,7 @@ Partie * import_Partie(const char * name){
                 board[j][k] = c;
             }
         }
-        ajouter_coup(p, board, who_played);
+        ajout_Coup_Partie(p, board, who_played);
     }
 
     fclose(fichier);
