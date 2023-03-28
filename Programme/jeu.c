@@ -256,6 +256,16 @@ Partie * import_Partie(const char * name){
     return p;
 }
 
+void free_Partie(Partie * p){
+    liste_Coup * coup = p->premier;
+    while (coup != NULL) {
+        liste_Coup * next = coup->suiv;
+        free(coup);
+        coup = next;
+    }
+    free(p);
+}
+
 /*LISTE_coup * init_listeC(LISTE_coup * listeC){
     listeC = (LISTE_coup*)malloc(sizeof(LISTE_coup));
 	listeC->premier = NULL;
