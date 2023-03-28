@@ -161,7 +161,7 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
     int waitTemp = scanf("%d", &waitTemp);
 }
 
-Partie * init_Partie(Partie * p, char board[TAILLE][TAILLE]){
+void init_Partie(Partie * p, char board[TAILLE][TAILLE]){
     p->nbCoups = 0;
     p->premier = NULL;
     p->dernier = NULL;
@@ -178,8 +178,6 @@ Partie * init_Partie(Partie * p, char board[TAILLE][TAILLE]){
     plateau_Debut->suiv = NULL;
     p->premier = plateau_Debut;
     p->dernier = plateau_Debut;
-
-    return p;
 }
 
 void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player){
@@ -209,6 +207,25 @@ void annuler_Coup(Partie * p){
     p->nbCoups--;
     
     free(last_Coup);
+}
+
+void save_Partie(Partie * p, char* name){
+    FILE* fichier = fopen(name, "w");
+    if (fichier == NULL) return;
+
+    fprintf(fichier, "%d\n", p->nbCoups);
+    liste_Coup * coup = p->premier;
+    while (coup != NULL) {
+        fprintf(fichier, "%c ", coup->who_played);
+        for (int i = 0; i < TAILLE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                fprintf(fichier, "%c", coup->board[i][j]);
+            }
+        }
+        fprintf(fichier, "\n");
+        coup = coup->suiv;
+    }
+    fclose(fichier);
 }
 
 /*LISTE_coup * init_listeC(LISTE_coup * listeC){
