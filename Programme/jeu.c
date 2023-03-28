@@ -44,6 +44,7 @@ void game_JvJ(Partie * p, char board[TAILLE][TAILLE]){
         Pstart = (Pstart == P1) ? P2 : P1;
     }
     CleanWindows
+    save_Partie(p, "Partie.txt");
     disp_resultat(board, quitter_partie);
 }
 
@@ -91,6 +92,7 @@ bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
         else printf("Coup invalide\n");
     }
     place_Selection(board, ligne, col, Player);
+    ajout_Coup_Partie(p, board, Player);
     return quitter_partie;
 }
 
@@ -253,6 +255,17 @@ Partie * import_Partie(const char * name){
 
     fclose(fichier);
     return p;
+}
+
+void charger_Partie(Partie * p, char board[TAILLE][TAILLE]){
+    if (p->nbCoups == 0) return;
+    
+    liste_Coup * last_Coup = p->dernier;
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            board[i][j] = last_Coup->board[i][j];
+        }
+    }
 }
 
 void free_Partie(Partie * p){

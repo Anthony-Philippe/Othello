@@ -24,7 +24,8 @@ int main(void){
 					else if(choix == 2) game_JvJ(p, board);
 				}
 				else if(choix == 2){
-					char Dernier_Joueur;
+					p = import_Partie("partie.txt");
+					charger_Partie(p, board);
 					game_JvJ(p, board);
 				}
 				break;
