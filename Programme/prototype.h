@@ -52,6 +52,7 @@ bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
 
 Partie * init_Partie(Partie * p, char board[TAILLE][TAILLE]);
+void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player);
 
 /*LISTE_coup * init_listeC(LISTE_coup * listeC);
 void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player);

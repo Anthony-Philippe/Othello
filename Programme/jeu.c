@@ -182,6 +182,23 @@ Partie * init_Partie(Partie * p, char board[TAILLE][TAILLE]){
     return p;
 }
 
+void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player){
+    liste_Coup* new_Coup = malloc(sizeof(liste_Coup));
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            new_Coup->board[i][j] = board[i][j];
+        }
+    }
+    new_Coup->who_played = Player;
+    new_Coup->prec = p->dernier;
+    new_Coup->suiv = NULL;
+
+    if (p->dernier != NULL) p->dernier->suiv = new_Coup;
+    else p->premier = new_Coup;
+    p->dernier = new_Coup;
+    p->nbCoups++;
+}
+
 /*LISTE_coup * init_listeC(LISTE_coup * listeC){
     listeC = (LISTE_coup*)malloc(sizeof(LISTE_coup));
 	listeC->premier = NULL;
