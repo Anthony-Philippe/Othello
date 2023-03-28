@@ -58,14 +58,6 @@ void save_Partie(Partie * p, const char* name);
 Partie * import_Partie(const char * name);
 void free_Partie(Partie * p);
 
-/*LISTE_coup * init_listeC(LISTE_coup * listeC);
-void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player);
-void annuler_Coup(LISTE_coup * listeC);
-void save_Liste(LISTE_coup * listeC, char* name);
-LISTE_coup * import_Liste_coup(LISTE_coup * listeC, char* name);
-void save_Partie(char board[TAILLE][TAILLE], char Player, char* name);
-void import_Partie(char board[TAILLE][TAILLE], char* Player, char* name);*/
-
 // * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);
 void computerPlay(char board[8][8]);
