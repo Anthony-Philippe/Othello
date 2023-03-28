@@ -54,7 +54,8 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
 void init_Partie(Partie * p, char board[TAILLE][TAILLE]);
 void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player);
 void annuler_Coup(Partie * p);
-void save_Partie(Partie * p, char* name);
+void save_Partie(Partie * p, const char* name);
+Partie * import_Partie(const char * name);
 
 /*LISTE_coup * init_listeC(LISTE_coup * listeC);
 void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player);

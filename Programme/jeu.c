@@ -209,7 +209,7 @@ void annuler_Coup(Partie * p){
     free(last_Coup);
 }
 
-void save_Partie(Partie * p, char* name){
+void save_Partie(Partie * p, const char * name){
     FILE* fichier = fopen(name, "w");
     if (fichier == NULL) return;
 
@@ -226,6 +226,34 @@ void save_Partie(Partie * p, char* name){
         coup = coup->suiv;
     }
     fclose(fichier);
+}
+
+Partie * import_Partie(const char * name){
+    FILE* fichier = fopen(name, "r");
+    if (fichier == NULL) return NULL;
+
+    char board[TAILLE][TAILLE];
+    init_board(board);
+	Partie * p;
+	init_Partie(p, board);
+
+    int nbCoups;
+    fscanf(fichier, "%d\n", &nbCoups);
+    for (int i = 0; i < nbCoups; i++){
+        char who_played;
+        fscanf(fichier, "%c ", &who_played);
+        for (int j = 0; j < TAILLE; j++) {
+            for (int k = 0; k < TAILLE; k++){
+                char c;
+                fscanf(fichier, "%c", &c);
+                board[j][k] = c;
+            }
+        }
+        ajouter_coup(p, board, who_played);
+    }
+
+    fclose(fichier);
+    return p;
 }
 
 /*LISTE_coup * init_listeC(LISTE_coup * listeC){
