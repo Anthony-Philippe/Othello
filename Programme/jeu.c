@@ -30,7 +30,7 @@ void disp_board(char board[TAILLE][TAILLE]){
     printf("\n");
 }
 
-void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]){
+void game_JvJ(liste_Coup * C_board, char board[TAILLE][TAILLE]){
     bool end_Game = false;
     bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
@@ -38,7 +38,7 @@ void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]){
         CleanWindows
         check_Pos_Jouable(board, Pstart);
         disp_board(board);
-        quitter_partie = pos_Selection(listeC, board, Pstart);
+        quitter_partie = pos_Selection(C_board, board, Pstart);
         if(quitter_partie) break;
         if(check_Gagnant(board)) end_Game = true;
         Pstart = (Pstart == P1) ? P2 : P1;
@@ -80,7 +80,7 @@ void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
     }
 }
 
-bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player){
+bool pos_Selection(liste_Coup * C_board, char board[TAILLE][TAILLE], char Player){
     int ligne, col;
     bool quitter_partie = false;
     while (1){
@@ -91,7 +91,7 @@ bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player)
         else printf("Coup invalide\n");
     }
     place_Selection(board, ligne, col, Player);
-    ajout_Coup_liste(listeC, ligne, col, Player);
+    //ajout_Coup_liste(C_board, ligne, col, Player);
     return quitter_partie;
 }
 
@@ -161,7 +161,28 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
     int waitTemp = scanf("%d", &waitTemp);
 }
 
-LISTE_coup * init_listeC(LISTE_coup * listeC){
+Partie * init_Partie(Partie * p, char board[TAILLE][TAILLE]){
+    p->nbCoups = 0;
+    p->premier = NULL;
+    p->dernier = NULL;
+
+    liste_Coup* plateau_Debut = malloc(sizeof(liste_Coup));
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            plateau_Debut->board[i][j] = board[i][j];
+        }
+    }
+
+    plateau_Debut->who_played = ' ';
+    plateau_Debut->prec = NULL;
+    plateau_Debut->suiv = NULL;
+    p->premier = plateau_Debut;
+    p->dernier = plateau_Debut;
+
+    return p;
+}
+
+/*LISTE_coup * init_listeC(LISTE_coup * listeC){
     listeC = (LISTE_coup*)malloc(sizeof(LISTE_coup));
 	listeC->premier = NULL;
 	listeC->dernier = NULL;
@@ -253,4 +274,4 @@ void import_Partie(char board[TAILLE][TAILLE], char* Player, char* name){
     }
     fscanf(fichier, " %c", Player);
     fclose(fichier);
-}
+}*/
