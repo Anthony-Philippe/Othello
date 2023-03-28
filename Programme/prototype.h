@@ -18,19 +18,19 @@
 #define INFINITY 1000000 // Valeur infinie
 #define NEG_INFINITY -1000000 // Valeur moins l'infini;
 
-typedef struct FILE_coup FILE_coup; // ? Sauvegarde des coups joués durant une partie
-struct FILE_coup{
-    int coup_Joué[2];
-    char Joueur;
-    FILE_coup* prec;
-    FILE_coup* suiv;
+typedef struct liste_Coup liste_Coup;
+struct liste_Coup{
+    char board[TAILLE][TAILLE];
+    char who_played;
+    liste_Coup* prec;
+    liste_Coup* suiv;
 };
 
-typedef struct LISTE_coup LISTE_coup;
-struct LISTE_coup{
+typedef struct Partie Partie;
+struct Partie{
     int nbCoups;
-    FILE_coup* premier;
-    FILE_coup* dernier;
+    liste_Coup* premier;
+    liste_Coup* dernier;
 };
 
 // * Interface
@@ -42,22 +42,22 @@ int menu_Start2();
 // * Jeu
 void init_board(char board[TAILLE][TAILLE]);
 void disp_board(char board[TAILLE][TAILLE]);
-void game_JvJ(LISTE_coup * listeC, char board[TAILLE][TAILLE]);
+void game_JvJ(Partie * p, char board[TAILLE][TAILLE]);
 char joueur_Aléatoire();
 void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player);
-bool pos_Selection(LISTE_coup * listeC, char board[TAILLE][TAILLE], char Player);
+bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player);
 void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player);
 bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirH);
 bool check_Gagnant(char board[TAILLE][TAILLE]);
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie);
 
-LISTE_coup * init_listeC(LISTE_coup * listeC);
-void ajout_Coup_liste(LISTE_coup * listeC, int ligne, int col, char Player);
-void annuler_Coup(LISTE_coup * listeC);
-void save_Liste(LISTE_coup * listeC, char* name);
-LISTE_coup * import_Liste_coup(LISTE_coup * listeC, char* name);
-void save_Partie(char board[TAILLE][TAILLE], char Player, char* name);
-void import_Partie(char board[TAILLE][TAILLE], char* Player, char* name);
+void init_Partie(Partie * p, char board[TAILLE][TAILLE]);
+void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player);
+void annuler_Coup(Partie * p);
+void save_Partie(Partie * p, const char* name);
+Partie * import_Partie(const char * name);
+void charger_Partie(Partie * p, char board[TAILLE][TAILLE]);
+void free_Partie(Partie * p);
 
 // * IA
 int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);
