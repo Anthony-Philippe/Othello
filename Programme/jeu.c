@@ -87,12 +87,16 @@ bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
     while (1){
         printf("P%c, Entrez position: Ligne Colonne → ", Player);
         scanf("%d %d", &ligne, &col);
-        if(col == 0) return quitter_partie = true;
+        if(col == -1) return quitter_partie = true;
+        if(col == 9){
+            annuler_Coup(p);
+            charger_Partie(p, board);
+        }
         if(board[ligne][col] == '~') break;
         else printf("Coup invalide\n");
     }
     place_Selection(board, ligne, col, Player);
-    ajout_Coup_Partie(p, board, Player);
+    //ajout_Coup_Partie(p, board, Player);
     return quitter_partie;
 }
 

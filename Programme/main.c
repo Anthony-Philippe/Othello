@@ -1,10 +1,11 @@
 #include "prototype.h"
 
 int main(void){
-    char board[TAILLE][TAILLE];
+
+	char board[TAILLE][TAILLE];
     init_board(board);
 	Partie * p;
-	init_Partie(p, board);
+	//init_Partie(p, board);
     
     while(1){
         CleanWindows

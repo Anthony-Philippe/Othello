@@ -12,7 +12,7 @@
 | Recommencer une partie                        |   |
 | Niveau IA ajustable                           |   |
 | Possibilité d’annuler coups                   | ✓ |
-| Arrêter, enregistrer, reprendre une partie    | ✓ |
+| Arrêter, enregistrer, reprendre une partie    | ~ |
 | Paramètres d’évaluation enregistrés (fichier) |   |
 
 | A rendre                                      |   |
