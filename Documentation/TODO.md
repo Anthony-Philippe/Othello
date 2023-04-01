@@ -9,7 +9,7 @@
 | Vérification gagnant / égalité                | ✓ |
 | Affichage résultat                            | ✓ |
 | Passer tour du joueur (ordinateur)            |   |
-| Annuler coup                                  |   |
+| Annuler coup                                  | ✓ |
 | Arréter partie en cours                       | ✓ |
 | Enregistrer partie                            | ✓ |
 | Reprendre partie                              | ✓ |

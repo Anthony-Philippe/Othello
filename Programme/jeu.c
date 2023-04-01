@@ -34,6 +34,10 @@ void game_JvJ(Partie * p, char board[TAILLE][TAILLE]){
     bool end_Game = false;
     bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
+    if (p->dernier != NULL){
+        Pstart = p->dernier->who_played;
+        Pstart = (Pstart == P1) ? P2 : P1;
+    } 
     while (!end_Game) {
         CleanWindows
         check_Pos_Jouable(board, Pstart);
@@ -88,12 +92,17 @@ bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
         printf("P%c, Entrez position: Ligne Colonne → ", Player);
         scanf("%d %d", &ligne, &col);
         if(col == -1) return quitter_partie = true;
-        if(col == 9){
-            annuler_Coup(p);
-            charger_Partie(p, board);
-            disp_board(board);
+        else if(col == 9){
+            if(p->nbCoups == 1) printf("Impossible d'annuler le coup\n");
+            else{
+                annuler_Coup(p);
+                charger_Partie(p, board);
+                Player = (Player == 'X') ? 'O' : 'X';
+                check_Pos_Jouable(board, Player);
+                disp_board(board);
+            }
         }
-        if(board[ligne][col] == '~') break;
+        else if(board[ligne][col] == '~') break;
         else printf("Coup invalide\n");
     }
     place_Selection(board, ligne, col, Player);
