@@ -11,8 +11,8 @@
 | Passer tour du joueur (ordinateur)            |   |
 | Annuler coup                                  |   |
 | Arréter partie en cours                       | ✓ |
-| Enregistrer partie                            |   |
-| Reprendre partie                              |   |
+| Enregistrer partie                            | ✓ |
+| Reprendre partie                              | ✓ |
 | ...                                           |   |
 
 

@@ -91,12 +91,13 @@ bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
         if(col == 9){
             annuler_Coup(p);
             charger_Partie(p, board);
+            disp_board(board);
         }
         if(board[ligne][col] == '~') break;
         else printf("Coup invalide\n");
     }
     place_Selection(board, ligne, col, Player);
-    //ajout_Coup_Partie(p, board, Player);
+    ajout_Coup_Partie(p, board, Player);
     return quitter_partie;
 }
 
@@ -171,7 +172,7 @@ void init_Partie(Partie * p, char board[TAILLE][TAILLE]){
     p->premier = NULL;
     p->dernier = NULL;
 
-    liste_Coup* plateau_Debut = malloc(sizeof(liste_Coup));
+    liste_Coup * plateau_Debut = malloc(sizeof(liste_Coup));
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
             plateau_Debut->board[i][j] = board[i][j];
@@ -210,7 +211,7 @@ void annuler_Coup(Partie * p){
     if (p->dernier != NULL) p->dernier->suiv = NULL;
     else p->premier = NULL;
     p->nbCoups--;
-    
+
     free(last_Coup);
 }
 
@@ -218,14 +219,17 @@ void save_Partie(Partie * p, const char * name){
     FILE* fichier = fopen(name, "w");
     if (fichier == NULL) return;
 
-    fprintf(fichier, "%d\n", p->nbCoups);
+    fprintf(fichier, "%d", p->nbCoups);
     liste_Coup * coup = p->premier;
     while (coup != NULL) {
         fprintf(fichier, "%c ", coup->who_played);
+        fprintf(fichier, "\n");
         for (int i = 0; i < TAILLE; i++) {
             for (int j = 0; j < TAILLE; j++) {
+                if(coup->board[i][j] == VIDE) coup->board[i][j] = '~';
                 fprintf(fichier, "%c", coup->board[i][j]);
             }
+            fprintf(fichier, "\n");
         }
         fprintf(fichier, "\n");
         coup = coup->suiv;
@@ -239,19 +243,21 @@ Partie * import_Partie(const char * name){
 
     char board[TAILLE][TAILLE];
     init_board(board);
-	Partie * p;
+	Partie * p = malloc(sizeof(Partie));
 	init_Partie(p, board);
 
     int nbCoups;
-    fscanf(fichier, "%d\n", &nbCoups);
-    for (int i = 0; i < nbCoups; i++){
+    fscanf(fichier, "%d", &nbCoups);
+    for (int i = 0; i <= nbCoups; i++){
         char who_played;
         fscanf(fichier, "%c ", &who_played);
+        
         for (int j = 0; j < TAILLE; j++) {
             for (int k = 0; k < TAILLE; k++){
                 char c;
-                fscanf(fichier, "%c", &c);
+                fscanf(fichier, "%c ", &c);
                 board[j][k] = c;
+                if(board[j][k] == '~') board[j][k] = VIDE;
             }
         }
         ajout_Coup_Partie(p, board, who_played);

@@ -4,14 +4,15 @@ int main(void){
 
 	char board[TAILLE][TAILLE];
     init_board(board);
-	Partie * p;
-	//init_Partie(p, board);
+	Partie * p = malloc(sizeof(Partie));
+	init_Partie(p, board);
     
     while(1){
         CleanWindows
 		int choix = menu();
 		switch(choix){
 			default:
+				free_Partie(p);
 				couleur("31");
 				printf("\t Fermeture \n");
 				couleur("0");
