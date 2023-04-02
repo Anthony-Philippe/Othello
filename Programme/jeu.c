@@ -34,17 +34,14 @@ void game_JvJ(Partie * p, char board[TAILLE][TAILLE]){
     bool end_Game = false;
     bool quitter_partie = false;
     char Pstart = joueur_Aléatoire();
-    if (p->dernier != NULL){
-        Pstart = p->dernier->who_played;
-        Pstart = (Pstart == P1) ? P2 : P1;
-    } 
+    if (p->dernier != p->premier) Pstart = (p->dernier->who_played == P1) ? P2 : P1;
     while (!end_Game) {
         CleanWindows
         check_Pos_Jouable(board, Pstart);
         disp_board(board);
         quitter_partie = pos_Selection(p, board, Pstart);
         if(quitter_partie) break;
-        if(check_Gagnant(board)) end_Game = true;
+        end_Game = check_Gagnant(board);
         Pstart = (Pstart == P1) ? P2 : P1;
     }
     CleanWindows
@@ -54,9 +51,8 @@ void game_JvJ(Partie * p, char board[TAILLE][TAILLE]){
 
 char joueur_Aléatoire(){
     srand(time(NULL));
-    int Paléatoire = rand() % 2;
-    char Pstart = ' ';
-    return Pstart = (Paléatoire == 0) ? P1 : P2;
+    char Pstart = (rand()%2 == 0) ? P1 : P2;
+    return Pstart;
 }
 
 void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
@@ -87,17 +83,16 @@ void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
 
 bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
     int ligne, col;
-    bool quitter_partie = false;
     while (1){
         printf("P%c, Entrez position: Ligne Colonne → ", Player);
         scanf("%d %d", &ligne, &col);
-        if(col == -1) return quitter_partie = true;
-        else if(col == 9){
+        if(col == -1 || ligne == -1) return true;
+        else if(col == -2 || ligne == -2){
             if(p->nbCoups == 1) printf("Impossible d'annuler le coup\n");
             else{
                 annuler_Coup(p);
                 charger_Partie(p, board);
-                Player = (Player == 'X') ? 'O' : 'X';
+                Player = (Player == P1) ? P2 : P1;
                 check_Pos_Jouable(board, Player);
                 disp_board(board);
             }
@@ -107,7 +102,7 @@ bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
     }
     place_Selection(board, ligne, col, Player);
     ajout_Coup_Partie(p, board, Player);
-    return quitter_partie;
+    return false;
 }
 
 void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player){
@@ -116,12 +111,11 @@ void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player
     for (int DirH = -1; DirH <= 1; DirH++) {
         for (int DirL = -1; DirL <= 1; DirL++) {
             if (DirL == 0 && DirH == 0) continue;
-            bool capture = check_Direction(board, Player, ligne, col, DirL, DirH);
-            if (capture) {
+            if (check_Direction(board, Player, ligne, col, DirL, DirH)){
                 int i = ligne + DirL;
                 int j = col + DirH;
-                while ((i < TAILLE || j < TAILLE) && board[i][j] != VIDE) {
-                    if(board[i][j] == Player2) board[i][j] = Player;
+                while (i < TAILLE && j < TAILLE && board[i][j] == Player2) {
+                    board[i][j] = Player;
                     i += DirL;
                     j += DirH;
                 }
@@ -133,29 +127,25 @@ void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player
 bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirH){
     int i = ligne + DirL;
     int j = col + DirH;
-    bool capture = false;
-    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE && board[i][j] != VIDE) {
-        if (board[i][j] == Player) {
-            capture = true;
-            break;
-        }
+    while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE){
+        if (board[i][j] == Player) return true;
+        if (board[i][j] == VIDE) return false;
         i += DirL;
         j += DirH;
     }
-    return capture;
+    return false;
 }
 
 bool check_Gagnant(char board[TAILLE][TAILLE]){
-    bool Gagnant = false;
     int compteur = 0;
-    for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
+    for (int i = 0; i < TAILLE; i++){
+        for (int j = 0; j < TAILLE; j++){
             if (board[i][j] == '~') board[i][j] = VIDE;
             if (board[i][j] != VIDE) compteur++;
         }
     }
-    if (compteur == TAILLE * TAILLE+4) Gagnant = true;
-    return Gagnant;
+    if (compteur == TAILLE * TAILLE+4) return true;
+    return false;
 }
 
 void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
@@ -177,34 +167,33 @@ void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
 }
 
 void init_Partie(Partie * p, char board[TAILLE][TAILLE]){
-    p->nbCoups = 0;
-    p->premier = NULL;
-    p->dernier = NULL;
-
     liste_Coup * plateau_Debut = malloc(sizeof(liste_Coup));
+    plateau_Debut->who_played = ' ';
+    plateau_Debut->prec = NULL;
+    plateau_Debut->suiv = NULL;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
             plateau_Debut->board[i][j] = board[i][j];
         }
     }
 
-    plateau_Debut->who_played = ' ';
-    plateau_Debut->prec = NULL;
-    plateau_Debut->suiv = NULL;
+    p->nbCoups = 0;
+    p->premier = NULL;
+    p->dernier = NULL;
     p->premier = plateau_Debut;
     p->dernier = plateau_Debut;
 }
 
 void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player){
-    liste_Coup* new_Coup = malloc(sizeof(liste_Coup));
+    liste_Coup * new_Coup = malloc(sizeof(liste_Coup));
+    new_Coup->who_played = Player;
+    new_Coup->prec = p->dernier;
+    new_Coup->suiv = NULL;
     for (int i = 0; i < TAILLE; i++) {
         for (int j = 0; j < TAILLE; j++) {
             new_Coup->board[i][j] = board[i][j];
         }
     }
-    new_Coup->who_played = Player;
-    new_Coup->prec = p->dernier;
-    new_Coup->suiv = NULL;
 
     if (p->dernier != NULL) p->dernier->suiv = new_Coup;
     else p->premier = new_Coup;
@@ -225,14 +214,12 @@ void annuler_Coup(Partie * p){
 }
 
 void save_Partie(Partie * p, const char * name){
-    FILE* fichier = fopen(name, "w");
+    FILE* fichier = fopen(name, "w+");
     if (fichier == NULL) return;
 
     fprintf(fichier, "%d", p->nbCoups);
-    liste_Coup * coup = p->premier;
-    while (coup != NULL) {
-        fprintf(fichier, "%c ", coup->who_played);
-        fprintf(fichier, "\n");
+    for (liste_Coup * coup = p->premier; coup != NULL; coup = coup->suiv) {
+        fprintf(fichier, "%c\n", coup->who_played);
         for (int i = 0; i < TAILLE; i++) {
             for (int j = 0; j < TAILLE; j++) {
                 if(coup->board[i][j] == VIDE) coup->board[i][j] = '~';
@@ -241,7 +228,6 @@ void save_Partie(Partie * p, const char * name){
             fprintf(fichier, "\n");
         }
         fprintf(fichier, "\n");
-        coup = coup->suiv;
     }
     fclose(fichier);
 }
@@ -259,7 +245,7 @@ Partie * import_Partie(const char * name){
     fscanf(fichier, "%d", &nbCoups);
     for (int i = 0; i <= nbCoups; i++){
         char who_played;
-        fscanf(fichier, "%c ", &who_played);
+        fscanf(fichier, "%c\n", &who_played);
         
         for (int j = 0; j < TAILLE; j++) {
             for (int k = 0; k < TAILLE; k++){

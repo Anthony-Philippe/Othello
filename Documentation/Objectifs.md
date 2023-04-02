@@ -9,7 +9,7 @@
 | Fin de la parti                               | ✓ |
 | Gestion joueur                                | ✓ |
 | Joueur doit passer son tour                   |   |
-| Recommencer une partie                        |   |
+| Recommencer une partie                        | ✓  |
 | Niveau IA ajustable                           |   |
 | Possibilité d’annuler coups                   | ✓ |
 | Arrêter, enregistrer, reprendre une partie    | ✓ |
