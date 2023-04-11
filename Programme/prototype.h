@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
 
 #define couleur(param) printf("\033[%sm",param)
 #define CleanWindows system("clear");
@@ -60,5 +61,8 @@ void charger_Partie(Partie * p, char board[TAILLE][TAILLE]);
 void free_Partie(Partie * p);
 
 // * IA
-int minimax(char board[8][8], int depth, int alpha, int beta, int maximizingPlayer);
-void computerPlay(char board[8][8]);
+void valid_moves(char board[TAILLE][TAILLE], char Player, int moves[TAILLE * TAILLE][2], int *move_count);
+int eval_board(char board[TAILLE][TAILLE], char Player);
+int minimax(char board[TAILLE][TAILLE], char Player, int depth, int alpha, int beta, bool maximizingPlayer);
+void ai_move(char board[TAILLE][TAILLE], char Player, int depth, int *chosen_move);
+
