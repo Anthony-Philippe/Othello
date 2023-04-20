@@ -1,6 +1,78 @@
+#include "directive.h"
 #include "prototype.h"
 
-void init_board(char board[TAILLE][TAILLE]){
+partie_Data start_Game(partie_Data game, int board[TAILLE][TAILLE], Partie * p){
+    game = initialiser_la_Partie(game, board, p);
+    if (game.Mode == JvsIA && game.Joueur == P2) game = IA_Niveau1(board, game, p);
+    return game;
+}
+
+partie_Data initialiser_la_Partie(partie_Data game, int board[TAILLE][TAILLE], Partie * p){
+    game.Joueur = joueur_Aléatoire();
+    init_board(board);
+    init_Partie(p, board);
+    ajout_Coup_Partie(p, board, game);
+    if(game.Mode == JvsJ) p->type = JvsJ;
+    else if(game.Mode == JvsIA) p->type = JvsIA;
+    game.partie_Started = true;
+    return game;
+}
+
+int joueur_Aléatoire(){
+    srand(time(NULL));
+    return (rand()%2 == 0) ? P1 : P2;
+}
+
+int afficher_la_Partie(SDL_Renderer * Rendu, enum Pages index_PAGE, SDL_Texture ** Textures, int board[TAILLE][TAILLE], SDL_Texture ** Pion, partie_Data game){
+    if(game.Mode == JvsJ) index_PAGE = (game.Joueur == P1) ? GAME_J1 : GAME_J2;
+    else if(game.Mode == JvsIA) index_PAGE = GAME_IA;
+    disp_Background(Rendu, Textures, index_PAGE);
+    check_Pos_Jouable(board, game);
+    disp_Plateau(Rendu, Pion, board);
+    return index_PAGE;
+}
+
+int quitter_la_Partie(SDL_Renderer * Rendu, SDL_Event event, enum Pages index_PAGE, SDL_Texture ** Textures){
+    if(check_POS(event, index_PAGE) == 3){
+        index_PAGE = HOME;
+        disp_Background(Rendu, Textures, index_PAGE);
+    }
+    return index_PAGE;
+}
+
+partie_Data gameplay(SDL_Renderer * Rendu, enum Pages *index_PAGE, SDL_Texture ** Textures, int board[TAILLE][TAILLE], SDL_Texture ** Pion, partie_Data game , Partie * p){
+    if(poser_pion(board, game)){
+        play_Sound(SOUND_Click);
+        ajout_Coup_Partie(p, board, game);
+        if(game.Mode == JvsJ) game.Joueur = (game.Joueur == P1) ? P2 : P1;
+        else if(game.Mode == JvsIA){
+            game.Joueur = P2;
+            game = IA_Niveau1(board, game, p);
+        }
+        *index_PAGE = afficher_la_Partie(Rendu, *index_PAGE, Textures, board, Pion, game);
+    
+    }
+    *index_PAGE = fin_de_partie(Rendu, *index_PAGE, Textures, board, Pion, game);
+    return game;
+}
+
+partie_Data annuler_dernier_Coup(Partie * p, int board[TAILLE][TAILLE], partie_Data game){
+    if(game.Mode == JvsIA) annuler_Coup(p);
+    else game.Joueur = (game.Joueur == P1) ? P2 : P1;
+    annuler_Coup(p);
+    charger_Partie(p, board);
+    return game;
+}
+
+int fin_de_partie(SDL_Renderer * Rendu, enum Pages index_PAGE, SDL_Texture ** Textures, int board[TAILLE][TAILLE], SDL_Texture ** Pion, partie_Data game){
+    if(is_full_board(board)){
+        index_PAGE = afficher_la_Partie(Rendu, index_PAGE, Textures, board, Pion, game);
+        return ENDGAME;
+    }
+    return index_PAGE;
+}
+
+void init_board(int board[TAILLE][TAILLE]){
     for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
         for (int Col = 0; Col < TAILLE; Col++) {
             if ((Ligne == 3 && Col == 3) || (Ligne == 4 && Col == 4)) board[Ligne][Col] = P1;
@@ -10,66 +82,21 @@ void init_board(char board[TAILLE][TAILLE]){
     }
 }
 
-void disp_board(char board[TAILLE][TAILLE]){
-    printf("\n  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
-    printf("\n");
-    for (int Ligne = 0; Ligne < TAILLE; Ligne++) {
-        printf("%d ", Ligne);
-        for (int Col = 0; Col < TAILLE; Col++) {
-            if(board[Ligne][Col] == P1) couleur("31");
-            if(board[Ligne][Col] == P2) couleur("34");
-            printf("%c ", board[Ligne][Col]);
-            couleur("0");
-        }
-        printf("%d ", Ligne);
-        printf("\n");
-    }
-    printf("  ");
-    for (int Col = 0; Col < TAILLE; Col++) printf("%d ", Col);
-    printf("\n");
-}
-
-void game_JvJ(Partie * p, char board[TAILLE][TAILLE]){
-    bool end_Game = false;
-    bool quitter_partie = false;
-    char Pstart = joueur_Aléatoire();
-    if (p->dernier != p->premier) Pstart = (p->dernier->who_played == P1) ? P2 : P1;
-    while (!end_Game) {
-        CleanWindows
-        check_Pos_Jouable(board, Pstart);
-        disp_board(board);
-        quitter_partie = pos_Selection(p, board, Pstart);
-        if(quitter_partie) break;
-        end_Game = check_Gagnant(board);
-        Pstart = (Pstart == P1) ? P2 : P1;
-    }
-    CleanWindows
-    save_Partie(p, "Partie.txt");
-    disp_resultat(board, quitter_partie);
-}
-
-char joueur_Aléatoire(){
-    srand(time(NULL));
-    char Pstart = (rand()%2 == 0) ? P1 : P2;
-    return Pstart;
-}
-
-void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
-    char Player2 = (Player == 'X') ? 'O' : 'X';
+void check_Pos_Jouable(int board[TAILLE][TAILLE], partie_Data game){
+    char Joueur2 = (game.Joueur == P1) ? P2 : P1;
     for (int Lig = 0; Lig < TAILLE; Lig++) {
         for (int Col = 0; Col < TAILLE; Col++) {
-            if (board[Lig][Col] == '~') board[Lig][Col] = VIDE;
+            if (board[Lig][Col] == case_Jouable) board[Lig][Col] = VIDE;
             if (board[Lig][Col] == VIDE) {
                 for (int DirH = -1; DirH <= 1; DirH++) {
                     for (int DirL = -1; DirL <= 1; DirL++) {
                         if ((DirH != 0 || DirL != 0)
                             && (Lig + DirH >= 0 && Lig + DirH < 8 && Col + DirL >= 0 && Col + DirL < 8)
-                            && board[Lig + DirH][Col + DirL] == Player2) {
+                            && board[Lig + DirH][Col + DirL] == Joueur2) {
                                 for (int PosX = Lig + DirH, PosY = Col + DirL; PosX >= 0 && PosX < 8 && PosY >= 0 && PosY < 8; PosX += DirH, PosY += DirL) {
-                                    if (board[PosX][PosY] == ' ') break;
-                                    else if (board[PosX][PosY] == Player) {
-                                        board[Lig][Col] = '~';
+                                    if (board[PosX][PosY] == VIDE) break;
+                                    else if (board[PosX][PosY] == game.Joueur) {
+                                        board[Lig][Col] = case_Jouable;
                                         break;
                                     }
                                 }
@@ -81,204 +108,78 @@ void check_Pos_Jouable(char board[TAILLE][TAILLE], char Player){
     }
 }
 
-bool pos_Selection(Partie * p, char board[TAILLE][TAILLE], char Player){
-    int ligne, col;
-    while (1){
-        printf("P%c, Entrez position: Ligne Colonne → ", Player);
-        scanf("%d %d", &ligne, &col);
-        if(col == -1 || ligne == -1) return true;
-        else if(col == -2 || ligne == -2){
-            if(p->nbCoups == 1) printf("Impossible d'annuler le coup\n");
-            else{
-                annuler_Coup(p);
-                charger_Partie(p, board);
-                Player = (Player == P1) ? P2 : P1;
-                check_Pos_Jouable(board, Player);
-                disp_board(board);
-            }
+bool poser_pion(int board[TAILLE][TAILLE], partie_Data game){
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    int plateau_x = 402 - OFFSET, plateau_y = 71 - OFFSET;
+    int pos_Case[2] = {(x - plateau_x) / (size_CASE + 15), (y - plateau_y) / (size_CASE + 15)};
+    if (pos_Case[0] >= 0 && pos_Case[0] < 8 && pos_Case[1] >= 0 && pos_Case[1] < 8){
+        if (board[pos_Case[1]][pos_Case[0]] == case_Jouable) {
+			place_Selection(board, game, pos_Case);
+            return true;
         }
-        else if(board[ligne][col] == '~') break;
-        else printf("Coup invalide\n");
     }
-    place_Selection(board, ligne, col, Player);
-    ajout_Coup_Partie(p, board, Player);
     return false;
 }
 
-void place_Selection(char board[TAILLE][TAILLE], int ligne, int col, char Player){
-    board[ligne][col] = Player;
-    char Player2 = (Player == 'X') ? 'O' : 'X';
-    for (int DirH = -1; DirH <= 1; DirH++) {
-        for (int DirL = -1; DirL <= 1; DirL++) {
-            if (DirL == 0 && DirH == 0) continue;
-            if (check_Direction(board, Player, ligne, col, DirL, DirH)){
-                int i = ligne + DirL;
-                int j = col + DirH;
-                while (i < TAILLE && j < TAILLE && board[i][j] == Player2) {
-                    board[i][j] = Player;
-                    i += DirL;
-                    j += DirH;
+void place_Selection(int board[TAILLE][TAILLE], partie_Data game, int pos_Case[2]){
+    board[pos_Case[1]][pos_Case[0]] = game.Joueur;
+    int Joueur2 = (game.Joueur == P1) ? P2 : P1;
+    int Direction[2];
+    for (Direction[0] = -1; Direction[0] <= 1; Direction[0]++) {
+        for (Direction[1] = -1; Direction[1] <= 1; Direction[1]++) {
+            if (Direction[1] == 0 && Direction[0] == 0) continue;
+            if (check_Direction(board, game, pos_Case, Direction)){
+                int i = pos_Case[1] + Direction[1];
+                int j = pos_Case[0] + Direction[0];
+                while (i < TAILLE && j < TAILLE && board[i][j] == Joueur2) {
+                    board[i][j] = game.Joueur;
+                    i += Direction[1];
+                    j += Direction[0];
                 }
             }
         }
     }
 }
 
-bool check_Direction(char board[TAILLE][TAILLE], char Player, int ligne, int col, int DirL, int DirH){
-    int i = ligne + DirL;
-    int j = col + DirH;
+bool check_Direction(int board[TAILLE][TAILLE], partie_Data game, int pos_Case[2], int Direction[2]){
+    int i = pos_Case[1] + Direction[1];
+    int j = pos_Case[0] + Direction[0];
     while (i >= 0 && i < TAILLE && j >= 0 && j < TAILLE){
-        if (board[i][j] == Player) return true;
+        if (board[i][j] == game.Joueur) return true;
         if (board[i][j] == VIDE) return false;
-        i += DirL;
-        j += DirH;
+        i += Direction[1];
+        j += Direction[0];
     }
     return false;
 }
 
-bool check_Gagnant(char board[TAILLE][TAILLE]){
-    int compteur = 0;
+bool is_full_board(int board[TAILLE][TAILLE]){
+    int nb_Pions = 0, coup_Possible = 0;
     for (int i = 0; i < TAILLE; i++){
-        for (int j = 0; j < TAILLE; j++){
-            if (board[i][j] == '~') board[i][j] = VIDE;
-            if (board[i][j] != VIDE) compteur++;
+        for (int j = 0; j < TAILLE; j++){ 
+            if (board[i][j] != VIDE && board[i][j] != case_Jouable) nb_Pions++;
+            if (board[i][j] == case_Jouable) coup_Possible++;
         }
     }
-    if (compteur == TAILLE * TAILLE+4) return true;
+    if(nb_Pions == TAILLE * TAILLE) return true;
+    else if (coup_Possible == 0) return true;
     return false;
 }
 
-void disp_resultat(char board[TAILLE][TAILLE], bool quitter_partie){
-    if(quitter_partie) return;
-    int score_P1 = 0;
-    int score_P2 = 0;
-    for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
-            if (board[i][j] == P1) score_P1++;
-            else if (board[i][j] == P2) score_P2++;
+void ResultatsPartie(SDL_Renderer* Rendu, TTF_Font* police, int board[TAILLE][TAILLE]){
+    int Résultats[3] = {0};
+    Result(board, Résultats);
+    afficherResultats(Rendu, police, Résultats);
+}
+
+void Result(int board[TAILLE][TAILLE], int Résultats[3]){
+    for(int i = 0; i < TAILLE; i++){
+        for(int j = 0; j < TAILLE; j++){
+            if(board[i][j] == P1) Résultats[0]++;
+            else if(board[i][j] == P2) Résultats[1]++;
         }
     }
-    printf("P1: %d\n", score_P1);
-    printf("P2: %d\n", score_P2);
-    if (score_P1 > score_P2) printf("Le P1 gagne !\n");
-    else if (score_P2 > score_P1) printf("Le P2 gagne !\n");
-    else printf("Egalité\n");
-    int waitTemp = scanf("%d", &waitTemp);
-}
-
-void init_Partie(Partie * p, char board[TAILLE][TAILLE]){
-    liste_Coup * plateau_Debut = malloc(sizeof(liste_Coup));
-    plateau_Debut->who_played = ' ';
-    plateau_Debut->prec = NULL;
-    plateau_Debut->suiv = NULL;
-    for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
-            plateau_Debut->board[i][j] = board[i][j];
-        }
-    }
-
-    p->nbCoups = 0;
-    p->premier = NULL;
-    p->dernier = NULL;
-    p->premier = plateau_Debut;
-    p->dernier = plateau_Debut;
-}
-
-void ajout_Coup_Partie(Partie * p, char board[TAILLE][TAILLE], char Player){
-    liste_Coup * new_Coup = malloc(sizeof(liste_Coup));
-    new_Coup->who_played = Player;
-    new_Coup->prec = p->dernier;
-    new_Coup->suiv = NULL;
-    for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
-            new_Coup->board[i][j] = board[i][j];
-        }
-    }
-
-    if (p->dernier != NULL) p->dernier->suiv = new_Coup;
-    else p->premier = new_Coup;
-    p->dernier = new_Coup;
-    p->nbCoups++;
-}
-
-void annuler_Coup(Partie * p){
-    if (p->dernier == NULL) return;
-
-    liste_Coup * last_Coup = p->dernier;
-    p->dernier = last_Coup->prec;
-    if (p->dernier != NULL) p->dernier->suiv = NULL;
-    else p->premier = NULL;
-    p->nbCoups--;
-
-    free(last_Coup);
-}
-
-void save_Partie(Partie * p, const char * name){
-    FILE* fichier = fopen(name, "w+");
-    if (fichier == NULL) return;
-
-    fprintf(fichier, "%d", p->nbCoups);
-    for (liste_Coup * coup = p->premier; coup != NULL; coup = coup->suiv) {
-        fprintf(fichier, "%c\n", coup->who_played);
-        for (int i = 0; i < TAILLE; i++) {
-            for (int j = 0; j < TAILLE; j++) {
-                if(coup->board[i][j] == VIDE) coup->board[i][j] = '~';
-                fprintf(fichier, "%c", coup->board[i][j]);
-            }
-            fprintf(fichier, "\n");
-        }
-        fprintf(fichier, "\n");
-    }
-    fclose(fichier);
-}
-
-Partie * import_Partie(const char * name){
-    FILE* fichier = fopen(name, "r");
-    if (fichier == NULL) return NULL;
-
-    char board[TAILLE][TAILLE];
-    init_board(board);
-	Partie * p = malloc(sizeof(Partie));
-	init_Partie(p, board);
-
-    int nbCoups;
-    fscanf(fichier, "%d", &nbCoups);
-    for (int i = 0; i <= nbCoups; i++){
-        char who_played;
-        fscanf(fichier, "%c\n", &who_played);
-        
-        for (int j = 0; j < TAILLE; j++) {
-            for (int k = 0; k < TAILLE; k++){
-                char c;
-                fscanf(fichier, "%c ", &c);
-                board[j][k] = c;
-                if(board[j][k] == '~') board[j][k] = VIDE;
-            }
-        }
-        ajout_Coup_Partie(p, board, who_played);
-    }
-
-    fclose(fichier);
-    return p;
-}
-
-void charger_Partie(Partie * p, char board[TAILLE][TAILLE]){
-    if (p->nbCoups == 0) return;
-    
-    liste_Coup * last_Coup = p->dernier;
-    for (int i = 0; i < TAILLE; i++) {
-        for (int j = 0; j < TAILLE; j++) {
-            board[i][j] = last_Coup->board[i][j];
-        }
-    }
-}
-
-void free_Partie(Partie * p){
-    liste_Coup * coup = p->premier;
-    while (coup != NULL) {
-        liste_Coup * next = coup->suiv;
-        free(coup);
-        coup = next;
-    }
-    free(p);
+    if(Résultats[0] > Résultats[1]) Résultats[2] = P1;
+    else Résultats[2] = P2;
 }
