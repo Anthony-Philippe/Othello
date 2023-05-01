@@ -59,7 +59,7 @@ SDL_Texture ** load_Pion(SDL_Renderer * Rendu, Param Settings){
 		PATH_IMAGES "pj.png"
     };
 	SDL_Texture ** Pion = malloc(sizeof(SDL_Texture *) * 3);
-	Pion[0] = load_Image(Rendu, sources[Settings.THEME - 1]);			// Charge les images des pions selon le thème choisi
+	Pion[0] = load_Image(Rendu, sources[Settings.THEME - 1]);	    // Charge les images des pions selon le thème choisi
 	Pion[1] = load_Image(Rendu, sources[Settings.THEME]);
 	Pion[2] = load_Image(Rendu, sources[case_Jouable]);
 	return Pion;

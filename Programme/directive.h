@@ -9,7 +9,6 @@
 #include "SDL2/SDL_mixer.h"
 #include "SDL2/SDL_ttf.h"
 
-
 #define PATH "Ressources/"                   //? PATH des ressources du programme
 #define PATH_AUDIO PATH "Audio/"             //  Fichiers audio
 #define PATH_IMAGES PATH "Images/"           //  Fichiers images

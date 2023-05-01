@@ -61,8 +61,8 @@ SDL_Rect * define_BTN(enum Pages index_PAGE);
 void free_Textures(SDL_Texture ** textures);                                                                                       //  Gestion de la Mémoire
 void FERMETURE_SDL(SDL_Window * Window, SDL_Renderer * Rendu, Mix_Music * musique, SDL_Texture ** Textures, SDL_Texture ** Pion, TTF_Font* police);
 
-//!          
-partie_Data start_Game(partie_Data game, int board[TAILLE][TAILLE], Partie * p);                                                   //  PROTOTYPES DU JEU
+//!                                                                                                                                //  PROTOTYPES DU JEU
+partie_Data start_Game(partie_Data game, int board[TAILLE][TAILLE], Partie * p);
 partie_Data initialiser_la_Partie(partie_Data game, int board[TAILLE][TAILLE], Partie * p);                                        //  Gestion du Jeu
 int joueur_Aléatoire();
 int afficher_la_Partie(SDL_Renderer * Rendu, enum Pages index_PAGE, SDL_Texture ** Textures, int board[TAILLE][TAILLE], SDL_Texture ** Pion, partie_Data game);
