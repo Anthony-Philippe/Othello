@@ -1,6 +1,9 @@
 {
     "files.associations": {
-        "stdlib.h": "c",
-        "stdio.h": "c"
+        "sdl_image.h": "c",
+        "prototype.h": "c",
+        "sdl.h": "c",
+        "sdl_mixer.h": "c",
+        "directive.h": "c"
     }
 }
